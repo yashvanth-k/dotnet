@@ -6,17 +6,17 @@ namespace VstsRestApiSamples.Tests
     {
         public static IConfiguration GetConfiguration(IConfiguration configuration)
         {
-            configuration.PersonalAccessToken = ConfigurationSettings.AppSettings["appsetting.pat"].ToString();
-            configuration.Project = ConfigurationSettings.AppSettings["appsetting.project"].ToString();
-            configuration.MoveToProject = ConfigurationSettings.AppSettings["appsetting.movetoproject"].ToString();
-            configuration.Query = ConfigurationSettings.AppSettings["appsetting.query"].ToString();
-            configuration.Identity = ConfigurationSettings.AppSettings["appsetting.identity"].ToString();
-            configuration.UriString = ConfigurationSettings.AppSettings["appsetting.uri"].ToString();   
-            configuration.WorkItemIds = ConfigurationSettings.AppSettings["appsetting.workitemids"].ToString();
-            configuration.WorkItemId = ConfigurationSettings.AppSettings["appsetting.workitemid"].ToString();
-            configuration.ProcessId = ConfigurationSettings.AppSettings["appsetting.processid"].ToString();
-            configuration.PickListId = ConfigurationSettings.AppSettings["appsetting.picklistid"].ToString();
-            configuration.QueryId = ConfigurationSettings.AppSettings["appsetting.queryid"].ToString();
+            configuration.PersonalAccessToken = ConfigurationManager.AppSettings["appsetting.pat"].ToString();
+            configuration.Project = ConfigurationManager.AppSettings["appsetting.project"].ToString();
+            configuration.MoveToProject = ConfigurationManager.AppSettings["appsetting.movetoproject"].ToString();
+            configuration.Query = ConfigurationManager.AppSettings["appsetting.query"].ToString();
+            configuration.Identity = ConfigurationManager.AppSettings["appsetting.identity"].ToString();
+            configuration.UriString = ConfigurationManager.AppSettings["appsetting.uri"].ToString();   
+            configuration.WorkItemIds = ConfigurationManager.AppSettings["appsetting.workitemids"].ToString();
+            configuration.WorkItemId = ConfigurationManager.AppSettings["appsetting.workitemid"].ToString();
+            configuration.ProcessId = ConfigurationManager.AppSettings["appsetting.processid"].ToString();
+            configuration.PickListId = ConfigurationManager.AppSettings["appsetting.picklistid"].ToString();
+            configuration.QueryId = ConfigurationManager.AppSettings["appsetting.queryid"].ToString();
 
             return configuration;
         }
