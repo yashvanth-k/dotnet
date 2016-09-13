@@ -13,6 +13,10 @@ namespace VstsRestApiSamples.Build2
         public Build(IConfiguration configuration)
         {
             _configuration = configuration;
+
+            if (String.IsNullOrEmpty(_configuration.PersonalAccessToken))
+                throw new Exception("Please enter the Personal Access Token");
+
             _credentials = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", "", _configuration.PersonalAccessToken)));
         }
 
