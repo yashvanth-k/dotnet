@@ -24,14 +24,11 @@ namespace VstsRestApiSamples.Build2
         {
             BuildGetListofBuildDefinitionsResponse.Definitions viewModel = new BuildGetListofBuildDefinitionsResponse.Definitions();
 
-            //using (var client = new HttpClient())
+            if (String.IsNullOrEmpty(project))
+                throw new Exception("Please enter projetc");
+
             using (var client = Util.CreateConnection(_configuration, _credentials))
             {
-                //client.BaseAddress = new Uri(_configuration.UriString);
-                //client.DefaultRequestHeaders.Accept.Clear();
-                //client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _credentials);
-
                 HttpResponseMessage response = client.GetAsync(project + "/_apis/build/definitions?api-version=2.0").Result;
 
                 if (response.IsSuccessStatusCode)
