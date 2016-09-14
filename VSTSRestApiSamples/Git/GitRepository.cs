@@ -79,5 +79,24 @@ namespace VstsRestApiSamples.Git
                 return viewModel;
             }
         }
+
+        public GetCommitsByRepositoryIdResponse.Commits GetCommitsByRepositoryId(string repositoryId)
+        {
+            GetCommitsByRepositoryIdResponse.Commits viewModel = new GetCommitsByRepositoryIdResponse.Commits();
+
+            using (var client = Util.CreateConnection(_configuration, _credentials))
+            {
+                HttpResponseMessage response = client.GetAsync("/_apis/git/repositories/" + repositoryId + "/commits?api-version=2.0").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    viewModel = response.Content.ReadAsAsync<GetCommitsByRepositoryIdResponse.Commits>().Result;
+                }
+
+                viewModel.HttpStatusCode = response.StatusCode;
+
+                return viewModel;
+            }
+        }
     }
 }

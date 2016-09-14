@@ -56,6 +56,7 @@
     <Compile Include="ProjectsAndTeams\Processes.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="ViewModels\Git\GetAllRepositoriesResponse.cs" />
+    <Compile Include="ViewModels\Git\GetCommitsByRepositoryIdResponse.cs" />
     <Compile Include="ViewModels\Git\GetFolderAndChildrenResponse.cs" />
     <Compile Include="ViewModels\Git\GetRepositoryByIdResponse.cs" />
     <Compile Include="ViewModels\ProjectsAndTeams\ListofProjectsResponse.cs" />
