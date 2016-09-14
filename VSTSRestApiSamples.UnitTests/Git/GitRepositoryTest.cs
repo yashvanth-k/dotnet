@@ -51,5 +51,20 @@ namespace VstsRestApiSamples.Tests.Git
 
             request = null;
         }
+
+        [TestMethod, TestCategory("REST API"), TestCategory("GIT REST API")]
+        public void Git_Repository_GetFolderAndChildren_Success()
+        {
+            //arrange
+            GitRepository request = new GitRepository(_configuration);
+
+            //act
+            var response = request.GetFolderAndChildren("de6d058e-e19f-471d-b6f1-02234761f316", "/");
+
+            //assert
+            Assert.AreEqual(HttpStatusCode.OK, response.HttpStatusCode);
+
+            request = null;
+        }
     }
 }
