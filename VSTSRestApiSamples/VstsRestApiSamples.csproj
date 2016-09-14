@@ -51,9 +51,11 @@
     <Compile Include="Build2\Build.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="GettingStarted\Authentication.cs" />
+    <Compile Include="Git\GitRepository.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="ProjectsAndTeams\Processes.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="ViewModels\Git\GetAllRepositoriesResponse.cs" />
     <Compile Include="ViewModels\ProjectsAndTeams\ListofProjectsResponse.cs" />
     <Compile Include="WorkItemTracking\Attachments.cs" />
     <Compile Include="WorkItemTracking\Fields.cs" />
