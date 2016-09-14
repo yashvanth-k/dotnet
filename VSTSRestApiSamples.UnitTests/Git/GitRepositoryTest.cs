@@ -23,13 +23,28 @@ namespace VstsRestApiSamples.Tests.Git
         }
 
         [TestMethod, TestCategory("REST API"), TestCategory("GIT REST API")]
-        public void Git_Repository_GetAllRepositorys_Success()
+        public void Git_Repository_GetAllRepositories_Success()
         {
             //arrange
             GitRepository request = new GitRepository(_configuration);
 
             //act
             var response = request.GetAllRepositories();
+
+            //assert
+            Assert.AreEqual(HttpStatusCode.OK, response.HttpStatusCode);
+
+            request = null;
+        }
+
+        [TestMethod, TestCategory("REST API"), TestCategory("GIT REST API")]
+        public void Git_Repository_GetAllRepositoryById_Success()
+        {
+            //arrange
+            GitRepository request = new GitRepository(_configuration);
+
+            //act
+            var response = request.GetRepositoryById("de6d058e-e19f-471d-b6f1-02234761f316");
 
             //assert
             Assert.AreEqual(HttpStatusCode.OK, response.HttpStatusCode);

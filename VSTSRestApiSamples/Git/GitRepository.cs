@@ -41,5 +41,24 @@ namespace VstsRestApiSamples.Git
                 return viewModel;
             }
         }
+
+        public GetRepositoryByIdResponse.Repository GetRepositoryById(string repositoryId)
+        {
+            GetRepositoryByIdResponse.Repository viewModel = new GetRepositoryByIdResponse.Repository();
+
+            using (var client = Util.CreateConnection(_configuration, _credentials))
+            {
+                HttpResponseMessage response = client.GetAsync("/_apis/git/repositories/" + repositoryId + "?api-version=2.0").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    viewModel = response.Content.ReadAsAsync<GetRepositoryByIdResponse.Repository>().Result;
+                }
+
+                viewModel.HttpStatusCode = response.StatusCode;
+
+                return viewModel;
+            }
+        }
     }
 }
