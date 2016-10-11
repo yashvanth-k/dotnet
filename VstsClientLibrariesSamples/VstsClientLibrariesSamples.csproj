@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="GettingStarted\Authentication.cs" />
+    <Compile Include="Git\Sample.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProjectsAndTeams\Projects.cs" />

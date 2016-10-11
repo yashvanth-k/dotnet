@@ -13,5 +13,8 @@ namespace VstsClientLibrariesSamples
         string WorkItemIds { get; set; }
         Int32 WorkItemId { get; set; }
         string FilePath { get; set; }
+        string GitRepositoryId { get; set; }
+        string GitTargetVersionBranch { get; set; }
+        string GitBaseVersionBranch { get; set; }
     }
 }
