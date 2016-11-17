@@ -40,6 +40,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3-beta1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -66,6 +67,8 @@
     <Compile Include="GettingStarted\AuthenticationTest.cs" />
     <Compile Include="Git\GitRepositoryTest.cs" />
     <Compile Include="InitHelper.cs" />
+    <Compile Include="ProjectsAndTeams\ProjectCollectionsTest.cs" />
+    <Compile Include="ProjectsAndTeams\ProjectsTest.cs" />
     <Compile Include="ProjectsAndTeams\ProcessesTest.cs" />
     <Compile Include="ProjectsAndTeams\SamplesTest.cs" />
     <Compile Include="ProjectsAndTeams\TeamsTest.cs" />

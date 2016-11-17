@@ -5,21 +5,21 @@ using VstsRestApiSamples.ViewModels.ProjectsAndTeams;
 
 namespace VstsRestApiSamples.ProjectsAndTeams
 {
-    public class Projects
+    public class ProjectCollections
     {
         readonly IConfiguration _configuration;
         readonly string _credentials;
 
-        public Projects(IConfiguration configuration)
+        public ProjectCollections(IConfiguration configuration)
         {
             _configuration = configuration;
             _credentials = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", "", _configuration.PersonalAccessToken)));
         }
 
-        public ListofProjectsResponse.Projects GetProjects()
-        {           
+        public ListofProjectCollectionsResponse.ProjectCollections GetProjectCollections()
+        {
             // create a viewmodel that is a class that represents the returned json response
-            ListofProjectsResponse.Projects viewModel = new ListofProjectsResponse.Projects();
+            ListofProjectCollectionsResponse.ProjectCollections viewModel = new ListofProjectCollectionsResponse.ProjectCollections();
 
             // use the httpclient
             using (var client = new HttpClient())
@@ -30,13 +30,13 @@ namespace VstsRestApiSamples.ProjectsAndTeams
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _credentials);
 
                 // connect to the REST endpoint            
-                HttpResponseMessage response = client.GetAsync("_apis/projects?stateFilter=All&api-version=2.2").Result;
+                HttpResponseMessage response = client.GetAsync("_apis/projectcollections?stateFilter=All&api-version=2.2").Result;
 
                 // check to see if we have a succesfull respond
                 if (response.IsSuccessStatusCode)
                 {
                     // set the viewmodel from the content in the response
-                    viewModel = response.Content.ReadAsAsync<ListofProjectsResponse.Projects>().Result;                   
+                    viewModel = response.Content.ReadAsAsync<ListofProjectCollectionsResponse.ProjectCollections>().Result;                   
                 }
 
                 viewModel.HttpStatusCode = response.StatusCode;
@@ -46,13 +46,13 @@ namespace VstsRestApiSamples.ProjectsAndTeams
 
         }
         // / <summary>
-        // / get project by id
+        // / Get a Project Collection by Id
         // / </summary>
-        // / <param name="projectId"></param>
-        // / <returns>GetProjectResponse.Project</returns>
-        public GetProjectResponse.Project GetProject(string projectId)
+        // / <param name="projectCollectionId"></param>
+        // / <returns>GetProjectCollectionResponse.ProjectCollection</returns>
+        public GetProjectCollectionResponse.ProjectCollection GetProjectCollection(string projectCollectionId)
         {
-            GetProjectResponse.Project viewModel = new GetProjectResponse.Project();
+            GetProjectCollectionResponse.ProjectCollection viewModel = new GetProjectCollectionResponse.ProjectCollection();
 
             using (var client = new HttpClient())
             {
@@ -61,11 +61,11 @@ namespace VstsRestApiSamples.ProjectsAndTeams
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _credentials);
 
-                HttpResponseMessage response = client.GetAsync("_apis/projects/" + projectId + "?api-version=2.2").Result;
+                HttpResponseMessage response = client.GetAsync("_apis/projectcollections/" + projectCollectionId + "?api-version=2.2").Result;
 
                 if (response.IsSuccessStatusCode)
                 {
-                    viewModel = response.Content.ReadAsAsync<GetProjectResponse.Project>().Result;
+                    viewModel = response.Content.ReadAsAsync<GetProjectCollectionResponse.ProjectCollection>().Result;
                 }
 
                 viewModel.HttpStatusCode = response.StatusCode;
