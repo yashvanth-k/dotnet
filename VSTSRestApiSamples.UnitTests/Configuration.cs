@@ -17,5 +17,7 @@
         public string QueryId { get; set; }
         public string FilePath { get; set; }
         public string GitRepositoryId { get; set; }
+        public string GitTargetVersionBranch { get; set; }
+        public string GitBaseVersionBranch { get; set; }
     }
 }

@@ -21,5 +21,8 @@ namespace VstsClientLibrariesSamples.Tests
         public string WorkItemIds { get; set; }
         public Int32 WorkItemId { get; set; }
         public string FilePath { get; set; }
+        public string GitRepositoryId { get; set; }
+        public string GitTargetVersionBranch { get; set; }
+        public string GitBaseVersionBranch { get; set; }
     }
 }

@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="GettingStarted\Authentication.cs" />
+    <Compile Include="Git\Sample.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="ProjectsAndTeams\Processes.cs" />
     <Compile Include="ProjectsAndTeams\ProjectCollections.cs" />

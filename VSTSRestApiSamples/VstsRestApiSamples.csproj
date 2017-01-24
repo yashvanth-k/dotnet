@@ -61,6 +61,8 @@
     <Compile Include="ViewModels\WorkItemTracking\GetRestoredWorkItemResponse.cs" />
     <Compile Include="ViewModels\Git\GetAllRepositoriesResponse.cs" />
     <Compile Include="ViewModels\Git\GetCommitsByRepositoryIdResponse.cs" />
+    <Compile Include="ViewModels\Git\GetDiffsByRepositoryIdResponse.cs" />
+    <Compile Include="ViewModels\Git\GetStatsByRepositoryIdResponse.cs" />
     <Compile Include="ViewModels\Git\GetFolderAndChildrenResponse.cs" />
     <Compile Include="ViewModels\Git\GetRepositoryByIdResponse.cs" />
     <Compile Include="ViewModels\ProjectsAndTeams\GetOperationResponse.cs" />

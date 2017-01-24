@@ -111,5 +111,53 @@ namespace VstsRestApiSamples.Git
                 return viewModel;
             }
         }
+
+        public GetDiffsByRepositoryIdResponse.Diffs GetDiffsByRepositoryId(string repositoryId, string targetVersion, string baseVersion)
+        {
+            GetDiffsByRepositoryIdResponse.Diffs viewModel = new GetDiffsByRepositoryIdResponse.Diffs();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(_configuration.UriString);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _credentials);
+
+                HttpResponseMessage response = client.GetAsync("/_apis/git/repositories/" + repositoryId + "/diffs/commits?targetVersion=" + targetVersion + "&baseVersion=" + baseVersion + " &api-version=1.0").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    viewModel = response.Content.ReadAsAsync<GetDiffsByRepositoryIdResponse.Diffs>().Result;
+                }
+
+                viewModel.HttpStatusCode = response.StatusCode;
+
+                return viewModel;
+            }
+        }
+
+        public GetStatsByRepositoryIdResponse.Stats GetStatsByRepositoryId(string repositoryId)
+        {
+            GetStatsByRepositoryIdResponse.Stats viewModel = new GetStatsByRepositoryIdResponse.Stats();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(_configuration.UriString);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _credentials);
+
+                HttpResponseMessage response = client.GetAsync("/_apis/git/repositories/" + repositoryId + "/stats/branches?api-version=2.0").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    viewModel = response.Content.ReadAsAsync<GetStatsByRepositoryIdResponse.Stats>().Result;
+                }
+
+                viewModel.HttpStatusCode = response.StatusCode;
+
+                return viewModel;
+            }
+        }
     }
 }

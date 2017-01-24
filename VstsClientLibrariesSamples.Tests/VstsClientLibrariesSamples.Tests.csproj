@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="GettingStarted\AuthenticationTest.cs" />
+    <Compile Include="Git\GitSampleTests.cs" />
     <Compile Include="InitHelper.cs" />
     <Compile Include="ProjectsAndTeams\ProjectCollectionsTest.cs" />
     <Compile Include="ProjectsAndTeams\TeamProjectsTest.cs" />
