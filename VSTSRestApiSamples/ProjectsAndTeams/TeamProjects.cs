@@ -34,7 +34,7 @@ namespace VstsRestApiSamples.ProjectsAndTeams
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _credentials);
 
                 // connect to the REST endpoint            
-                HttpResponseMessage response = client.GetAsync("_apis/projects?api-version=2.2").Result;
+                HttpResponseMessage response = client.GetAsync("_apis/projects?$top=1000").Result;
 
                 // check to see if we have a succesfull respond
                 if (response.IsSuccessStatusCode)
