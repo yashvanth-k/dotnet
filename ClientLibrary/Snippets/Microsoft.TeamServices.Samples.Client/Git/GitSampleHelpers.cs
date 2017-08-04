@@ -146,6 +146,7 @@ namespace Microsoft.TeamServices.Samples.Client.Git
                     Name = $"sample-status-{Rng.Next(1,5)}",
                     Genre = "vsts-samples"
                 },
+                TargetUrl = "http://fabrikam-fiber-inc.com/CI/builds/1",
                 State = GitStatusState.Succeeded,
                 Description = "Sample status succeeded",
                 IterationId = iterationId
