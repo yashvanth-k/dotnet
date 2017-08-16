@@ -64,7 +64,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Part 5: Check to see if the user is a member of the group
             // 
             ClientSampleHttpLogger.SetOperationName(this.Context, "CheckMembershipUser");
-            graphClient.CheckMembershipAsync(userDescriptor, groupDescriptor).SyncResult();
+            graphClient.CheckMembershipExistenceAsync(userDescriptor, groupDescriptor).SyncResult();
 
             //
             // Part 6: Get every group the subject(user) is a member of
@@ -84,7 +84,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             ClientSampleHttpLogger.SetOperationName(this.Context, "DeleteMembershipUser");
             graphClient.RemoveMembershipAsync(userDescriptor, groupDescriptor).SyncResult();
             try {
-                graphClient.CheckMembershipAsync(userDescriptor, groupDescriptor).SyncResult();
+                graphClient.CheckMembershipExistenceAsync(userDescriptor, groupDescriptor).SyncResult();
             }
             catch (Exception e) {
                 Context.Log("User is no longer a member of the group:" + e.Message);
@@ -104,8 +104,8 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Try to get the deleted user
             try
             {
-                newUser = graphClient.GetUserAsync(userDescriptor).Result;
-                if (!newUser.Disabled) throw new Exception();
+                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
+                if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
             {
@@ -165,7 +165,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Part 5: Check to see if the 'Contractors' group is a member of the 'Developers' group
             // 
             ClientSampleHttpLogger.SetOperationName(this.Context, "CheckMembershipVSTSGroup");
-            graphClient.CheckMembershipAsync(childGroupDescriptor, parentGroupDescriptor).SyncResult();
+            graphClient.CheckMembershipExistenceAsync(childGroupDescriptor, parentGroupDescriptor).SyncResult();
 
             //
             // Part 6: Get every group the subject('Contractors') is a member of
@@ -186,7 +186,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             graphClient.RemoveMembershipAsync(childGroupDescriptor, parentGroupDescriptor).SyncResult();
             try
             {
-                graphClient.CheckMembershipAsync(childGroupDescriptor, parentGroupDescriptor).SyncResult();
+                graphClient.CheckMembershipExistenceAsync(childGroupDescriptor, parentGroupDescriptor).SyncResult();
             }
             catch (Exception e)
             {
@@ -252,7 +252,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Part 5: Check to see if the AAD group is a member of the VSTS 'Developers' group
             // 
             ClientSampleHttpLogger.SetOperationName(this.Context, "CheckMembershipAADGroup");
-            graphClient.CheckMembershipAsync(aadGroupDescriptor, parentGroupDescriptor).SyncResult();
+            graphClient.CheckMembershipExistenceAsync(aadGroupDescriptor, parentGroupDescriptor).SyncResult();
 
             //
             // Part 6: Get every group the subject(AAD group) is a member of
@@ -273,7 +273,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             graphClient.RemoveMembershipAsync(aadGroupDescriptor, parentGroupDescriptor).SyncResult();
             try
             {
-                graphClient.CheckMembershipAsync(aadGroupDescriptor, parentGroupDescriptor).SyncResult();
+                graphClient.CheckMembershipExistenceAsync(aadGroupDescriptor, parentGroupDescriptor).SyncResult();
             }
             catch (Exception e)
             {

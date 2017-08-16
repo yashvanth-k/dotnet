@@ -72,8 +72,8 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             try
             {
                 ClientSampleHttpLogger.SetOperationName(this.Context, "GetDisabledUserMSA");
-                newUser = graphClient.GetUserAsync(userDescriptor).Result;
-                if (!newUser.Disabled) throw new Exception();
+                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
+                if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
             {
@@ -121,8 +121,8 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             try
             {
                 ClientSampleHttpLogger.SetOperationName(this.Context, "GetDisabledUserAAD");
-                newUser = graphClient.GetUserAsync(userDescriptor).Result;
-                if (!newUser.Disabled) throw new Exception();
+                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
+                if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
             {
@@ -183,8 +183,8 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Try to get the deleted user
             try
             {
-                newUser = graphClient.GetUserAsync(userDescriptor).Result;
-                if (!newUser.Disabled) throw new Exception();
+                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
+                if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
             {
@@ -233,8 +233,8 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Try to get the deleted user
             try
             {
-                newUser = graphClient.GetUserAsync(userDescriptor).Result;
-                if (!newUser.Disabled) throw new Exception();
+                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
+                if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
             {
@@ -259,7 +259,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             GraphUserCreationContext addAADUserContext = new GraphUserOriginIdCreationContext
             {
                 OriginId = "e97b0e7f-0a61-41ad-860c-748ec5fcb20b",
-                Id = Guid.NewGuid()
+                StorageKey = Guid.NewGuid()
             };
 
             GraphUser newUser = graphClient.CreateUserAsync(addAADUserContext).Result;
@@ -281,8 +281,8 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Try to get the deleted user
             try
             {
-                newUser = graphClient.GetUserAsync(userDescriptor).Result;
-                if (!newUser.Disabled) throw new Exception();
+                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
+                if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
             {

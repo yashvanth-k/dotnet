@@ -144,7 +144,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             GraphGroupCreationContext addAADGroupContext = new GraphGroupOriginIdCreationContext
             {
                 OriginId = "f0d20172-7b96-42f6-9436-941433654b48",
-                Id = Guid.NewGuid()
+                StorageKey = Guid.NewGuid()
             };
 
             GraphGroup newGroup = graphClient.CreateGroupAsync(addAADGroupContext).Result;
