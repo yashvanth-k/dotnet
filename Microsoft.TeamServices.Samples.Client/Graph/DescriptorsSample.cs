@@ -10,7 +10,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
     public class DescriptorsSample : ClientSample
     {
         /// <summary>
-        /// Get a descriptor from a VSID
+        /// Get a descriptor from a StorageKey
         /// </summary>
         /// <returns></returns>
         [ClientSampleMethod]
@@ -23,12 +23,12 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 1: add the AAD user
             // 
-            Guid storageKey = Guid.NewGuid();
+            Guid storageKey = new Guid("9b71f216-4c4f-6b74-a911-efb0fa9c777f");
 
-            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithVSID");
+            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithStorageKey");
             GraphUserCreationContext addAADUserContext = new GraphUserOriginIdCreationContext
             {
-                OriginId = "e97b0e7f-0a61-41ad-860c-748ec5fcb20b",
+                OriginId = "27dbfced-5593-4756-98a3-913c39af7612",
                 StorageKey = storageKey
             };
 
@@ -41,17 +41,27 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Part 2: get the descriptor
             //
             ClientSampleHttpLogger.SetOperationName(this.Context, "GetDescriptorById");
-            SubjectDescriptor descriptor = graphClient.GetDescriptorByStorageKeyAsync(storageKey).Result;
+            GraphDescriptorResult descriptor = graphClient.GetDescriptorAsync(storageKey).Result; //TODO: This is failing!!!!!
+            try
+            {
+                if (descriptor.Value != userDescriptor) throw new Exception();
+            }
+            catch (Exception e)
+            {
+                Context.Log("The descriptors don't match!");
+            }
 
             //
             // Part 3: remove the user
             // 
+            ClientSampleHttpLogger.SetOperationName(this.Context, "DeleteUser");
             graphClient.DeleteUserAsync(userDescriptor).SyncResult();
 
             // Try to get the deleted user
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipState");
+            GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
             try
             {
-                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)

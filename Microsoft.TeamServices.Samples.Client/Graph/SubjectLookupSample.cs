@@ -25,7 +25,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 1: add the AAD user
             // 
-            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithVSID");
+            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithStorageKey");
             GraphUserCreationContext addAADUserContext = new GraphUserOriginIdCreationContext
             {
                 OriginId = "e97b0e7f-0a61-41ad-860c-748ec5fcb20b",
@@ -40,7 +40,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 2: add the AAD group
             // 
-            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADGroupByOIDWithVSID");
+            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADGroupByOIDWithStorageKey");
             GraphGroupCreationContext addAADGroupContext = new GraphGroupOriginIdCreationContext
             {
                 OriginId = "f0d20172-7b96-42f6-9436-941433654b48",
@@ -60,7 +60,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
                 new GraphSubjectLookupKey(newGroup.Descriptor),
                 new GraphSubjectLookupKey(newUser.Descriptor)
             });
-            ClientSampleHttpLogger.SetOperationName(this.Context, "LookupSubject");
+            ClientSampleHttpLogger.SetOperationName(this.Context, "LookupSubjects");
             IReadOnlyDictionary<SubjectDescriptor, GraphSubject> lookups = graphClient.LookupSubjectsAsync(subjectLookup).Result;
         }
     }

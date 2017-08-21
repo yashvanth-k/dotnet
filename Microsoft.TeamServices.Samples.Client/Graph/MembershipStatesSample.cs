@@ -23,7 +23,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 1: add the AAD user
             // 
-            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithVSID");
+            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithStorageKey");
             GraphUserCreationContext addAADUserContext = new GraphUserOriginIdCreationContext
             {
                 OriginId = "e97b0e7f-0a61-41ad-860c-748ec5fcb20b",
@@ -47,9 +47,9 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
 
             // Try to get the deleted user
             ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipStateBySubjectDescriptor-After");
+            membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
             try
             {
-                membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)

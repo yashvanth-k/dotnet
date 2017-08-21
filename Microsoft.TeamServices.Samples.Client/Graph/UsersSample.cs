@@ -60,7 +60,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Part 2: get the user
             //
             ClientSampleHttpLogger.SetOperationName(this.Context, "GetUserMSA");
-            //newUser = graphClient.GetUserAsync(userDescriptor).Result; //BUG ???: {"TF14045: The identity with type 'Microsoft.IdentityModel.Claims.ClaimsIdentity' and identifier '45aa3d2d-7442-473d-b4d3-3c670da9dd96\\fabrikamfiber4@hotmail.com' could not be found."}
+            newUser = graphClient.GetUserAsync(userDescriptor).Result;
 
             //
             // Part 3: remove the user
@@ -69,10 +69,10 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             graphClient.DeleteUserAsync(userDescriptor).SyncResult();
 
             // Try to get the deleted user
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipStateMSA");
+            GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
             try
             {
-                ClientSampleHttpLogger.SetOperationName(this.Context, "GetDisabledUserMSA");
-                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
@@ -109,7 +109,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             // Part 2: get the user
             //
             ClientSampleHttpLogger.SetOperationName(this.Context, "GetUserAAD");
-            //newUser = graphClient.GetUserAsync(userDescriptor).Result;  //BUG ???: {"TF14045: The identity with type 'Microsoft.IdentityModel.Claims.ClaimsIdentity' and identifier '45aa3d2d-7442-473d-b4d3-3c670da9dd96\\jtseng@vscsi.us' could not be found."}
+            newUser = graphClient.GetUserAsync(userDescriptor).Result;
 
             //
             // Part 3: remove the user
@@ -118,10 +118,10 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             graphClient.DeleteUserAsync(userDescriptor).SyncResult();
 
             // Try to get the deleted user
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipStateAAD");
+            GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
             try
             {
-                ClientSampleHttpLogger.SetOperationName(this.Context, "GetDisabledUserAAD");
-                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
@@ -172,18 +172,20 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 3: get the user
             //
-            //newUser = graphClient.GetUserAsync(userDescriptor).Result;  //BUG ???: {"TF14045: The identity with type 'Microsoft.IdentityModel.Claims.ClaimsIdentity' and identifier '45aa3d2d-7442-473d-b4d3-3c670da9dd96\\jtseng@vscsi.us' could not be found."}
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetUser-AddRemoveAADUserByUPNToGroup");
+            newUser = graphClient.GetUserAsync(userDescriptor).Result;
 
             //
             // Part 4: remove the user
             // 
-
+            ClientSampleHttpLogger.SetOperationName(this.Context, "DeleteUser-AddRemoveAADUserByUPNToGroup");
             graphClient.DeleteUserAsync(userDescriptor).SyncResult();
 
             // Try to get the deleted user
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipState-AddRemoveAADUserByUPNToGroup");
+            GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
             try
             {
-                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
@@ -222,18 +224,20 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 2: get the user
             //
-            //newUser = graphClient.GetUserAsync(userDescriptor).Result; //BUG ???: TF14045: The identity with type 'Microsoft.IdentityModel.Claims.ClaimsIdentity' and identifier '45aa3d2d-7442-473d-b4d3-3c670da9dd96\jtseng@vscsi.us' could not be found.
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetUser-AddRemoveAADUserByOID");
+            newUser = graphClient.GetUserAsync(userDescriptor).Result;
 
             //
             // Part 3: remove the user
             // 
-
+            ClientSampleHttpLogger.SetOperationName(this.Context, "DeleteUser-AddRemoveAADUserByOID");
             graphClient.DeleteUserAsync(userDescriptor).SyncResult();
 
             // Try to get the deleted user
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipState-AddRemoveAADUserByOID");
+            GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
             try
             {
-                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)
@@ -243,10 +247,10 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
         }
 
         /// <summary>
-        /// Add an existing Azure Active Directory user (by OID), with a specific VSID, and then remove it
+        /// Add an existing Azure Active Directory user (by OID), with a specific StorageKey, and then remove it
         /// </summary>
         [ClientSampleMethod]
-        public void AddRemoveAADUserByOIDWithVSID()
+        public void AddRemoveAADUserByOIDWithStorageKey()
         {
             // Get the client
             VssConnection connection = Context.Connection;
@@ -255,11 +259,11 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 1: add the AAD user
             // 
-            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithVSID");
+            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithStorageKey");
             GraphUserCreationContext addAADUserContext = new GraphUserOriginIdCreationContext
             {
-                OriginId = "e97b0e7f-0a61-41ad-860c-748ec5fcb20b",
-                StorageKey = Guid.NewGuid()
+                OriginId = "27dbfced-5593-4756-98a3-913c39af7612",
+                StorageKey = new Guid("9b71f216-4c4f-6b74-a911-efb0fa9c777f")
             };
 
             GraphUser newUser = graphClient.CreateUserAsync(addAADUserContext).Result;
@@ -270,18 +274,20 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 2: get the user
             //
-            //newUser = graphClient.GetUserAsync(userDescriptor).Result;
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetUser-AddRemoveAADUserByOIDWithStorageKey");
+            newUser = graphClient.GetUserAsync(userDescriptor).Result;
 
             //
             // Part 3: remove the user
             // 
-
+            ClientSampleHttpLogger.SetOperationName(this.Context, "DeleteUser-AddRemoveAADUserByOIDWithStorageKey");
             graphClient.DeleteUserAsync(userDescriptor).SyncResult();
 
             // Try to get the deleted user
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipState-AddRemoveAADUserByOIDWithStorageKey");
+            GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
             try
             {
-                GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
             catch (Exception e)

@@ -23,7 +23,7 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 1: add the AAD user
             // 
-            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithVSID");
+            ClientSampleHttpLogger.SetOperationName(this.Context, "MaterializeAADUserByOIDWithStorageKey");
             GraphUserCreationContext addAADUserContext = new GraphUserOriginIdCreationContext
             {
                 OriginId = "e97b0e7f-0a61-41ad-860c-748ec5fcb20b",
@@ -37,18 +37,19 @@ namespace Microsoft.TeamServices.Samples.Client.Graph
             //
             // Part 2: get the storage key
             //
-            //TODO: uncomment when the new client library is available
-            /*ClientSampleHttpLogger.SetOperationName(this.Context, "GetStorageKeyBySubjectDescriptor");
-            GraphStorageKey storageKey = graphClient.GetStorageKey(userDescriptor).Result;*/
+            ClientSampleHttpLogger.SetOperationName(this.Context, "GetStorageKeyBySubjectDescriptor");
+            GraphStorageKeyResult storageKey = graphClient.GetStorageKeyAsync(userDescriptor).Result;
 
             //
             // Part 3: remove the user
             // 
+            ClientSampleHttpLogger.SetOperationName(this.Context, "DeleteUser");
             graphClient.DeleteUserAsync(userDescriptor).SyncResult();
 
             // Try to get the deleted user
             try
             {
+                ClientSampleHttpLogger.SetOperationName(this.Context, "GetMembershipState");
                 GraphMembershipState membershipState = graphClient.GetMembershipStateAsync(userDescriptor).Result;
                 if (membershipState.Active) throw new Exception();
             }
