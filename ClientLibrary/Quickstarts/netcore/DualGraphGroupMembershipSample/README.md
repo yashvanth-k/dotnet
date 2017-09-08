@@ -1,6 +1,6 @@
 # Dual Graph Group Membership Sample
 
-Attempting to retreive all users in a VSTS group is no easy task. VSTS groups can nest users, Azure Active Directory groups, and other VSTS groups. In order to get all users, the new VSTS Graph API public preview and the Microsoft Graph API must be used in tandem to return all results. The below sample demonstrates how to do this.
+VSTS groups can nest users, Azure Active Directory groups, and other VSTS groups. In order to get all users, the new VSTS Graph API public preview and the Microsoft Graph API must be used in tandem to return all results. The below sample demonstrates how to do this.
 
 ## Sample Application
 
