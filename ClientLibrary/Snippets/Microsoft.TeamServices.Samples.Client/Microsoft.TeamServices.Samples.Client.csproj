@@ -65,6 +65,9 @@
     <Reference Include="Microsoft.TeamFoundation.DistributedTask.Common.Contracts, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.TeamFoundation.DistributedTask.Common.Contracts.15.121.0-preview\lib\net45\Microsoft.TeamFoundation.DistributedTask.Common.Contracts.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.TeamFoundation.DistributedTask.WebApi">
+      <HintPath>..\packages\Microsoft.TeamFoundation.DistributedTask.WebApi.15.121.0-preview\lib\net45\Microsoft.TeamFoundation.DistributedTask.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.TeamFoundation.Policy.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.121.0-preview\lib\net45\Microsoft.TeamFoundation.Policy.WebApi.dll</HintPath>
     </Reference>
@@ -136,6 +139,13 @@
     <Compile Include="ClientSampleHelpers.cs" />
     <Compile Include="ClientSampleHttpLogger.cs" />
     <Compile Include="ClientSampleUtils.cs" />
+    <Compile Include="DistributedTask\DeploymentGroupsSamplesBase.cs" />
+    <Compile Include="DistributedTask\DeploymentPoolAccessTokenSample.cs" />
+    <Compile Include="DistributedTask\DeploymentGroupAccessTokenSample.cs" />
+    <Compile Include="DistributedTask\DeploymentGroupsSample.cs" />
+    <Compile Include="DistributedTask\DeploymentPoolsSummarySample.cs" />
+    <Compile Include="DistributedTask\DeploymentTargetJobRequestsSample.cs" />
+    <Compile Include="DistributedTask\DeploymentTargetsSample.cs" />
     <Compile Include="Graph\DescriptorsSample.cs" />
     <Compile Include="Graph\MembershipStatesSample.cs" />
     <Compile Include="Graph\StorageKeySample.cs" />
