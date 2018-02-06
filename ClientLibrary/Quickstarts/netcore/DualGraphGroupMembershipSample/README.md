@@ -42,6 +42,6 @@ Packages: `Microsoft.Identity.Model.Clients.ActiveDirectory` and `Microsoft.Visu
 4. Open CS file `Program.cs` and there is a section with input values to change at the top of the class:
     * `vstsCollectionUrl` - update this with the url to your VSTS collection, e.g. http://myaccount.visualstudio.com.
     * `clientId` - update this with the `application id` you saved from step 2.6 above.
-    * `replyUri` - update this to `http://adalsample`, you can also add other reply urls in [azure portal](https://portal.azure.com)
+    * `replyUri` - update this to `http://adalsample`, you can also add other reply urls in [azure portal](https://portal.azure.com).
     * `groupDisplayName` - update this with the display name of the group you would like to get all user names from.
 5. Build and run the solution. After running you should see an interactive login prompt. Then after authentication and authorization, a list of all usernames from the selected VSTS group.
