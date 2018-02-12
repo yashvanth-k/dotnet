@@ -44,7 +44,7 @@ namespace Microsoft.TeamServices.Samples.Client.DistributedTask
             TaskAgentHttpClient dgClient = connection.GetClient<TaskAgentHttpClient>();
 
             // Get deployment targets by partial name match
-            string nameMatchPattern = "*Target1*";
+            string nameMatchPattern = "demo*get1";
             IList<DeploymentMachine> deploymentTargets = dgClient.GetDeploymentTargetsAsync(this.ProjectName, this.DemoDeploymentGroupId, name: nameMatchPattern, partialNameMatch: true).Result;
 
             return deploymentTargets;
@@ -115,15 +115,22 @@ namespace Microsoft.TeamServices.Samples.Client.DistributedTask
             IList<DeploymentMachine> deploymentTargets = dgClient.GetDeploymentTargetsAsync(this.ProjectName, this.DemoDeploymentGroupId, agentStatus: TaskAgentStatusFilter.Offline).Result;
 
             // Reduce the unnecessary properties and update tags
-            string newTag = DateTime.UtcNow.ToString();
-            foreach(DeploymentMachine target in deploymentTargets)
+            IList<DeploymentTargetUpdateParameter> targetUpdates = new List<DeploymentTargetUpdateParameter>();
+            foreach (DeploymentMachine target in deploymentTargets)
             {
-                target.Agent = new TaskAgent(target.Agent.Name) { Id = target.Agent.Id };
-                target.Tags.Add(newTag);
+                DeploymentTargetUpdateParameter targetUpdate = new DeploymentTargetUpdateParameter
+                {
+                    Id = target.Id,
+                    Agent = new DeploymentTargetUpdateParameterAgentProperty { Id = target.Agent.Id },
+                    Tags = target.Tags
+                };
+                targetUpdate.Tags.Add("newTag" + DateTime.UtcNow.ToBinary());
+
+                targetUpdates.Add(targetUpdate);
             }
 
             // Update the tags
-            IList<DeploymentMachine> updatedDeploymentTargets = dgClient.UpdateDeploymentTargetsAsync(this.ProjectName, this.DemoDeploymentGroupId, deploymentTargets).Result;
+            IList<DeploymentMachine> updatedDeploymentTargets = dgClient.UpdateDeploymentTargetsAsync(this.ProjectName, this.DemoDeploymentGroupId, targetUpdates).Result;
 
             return updatedDeploymentTargets;
         }

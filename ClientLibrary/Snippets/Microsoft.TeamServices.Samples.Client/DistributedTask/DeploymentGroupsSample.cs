@@ -19,12 +19,12 @@ namespace Microsoft.TeamServices.Samples.Client.DistributedTask
             TaskAgentHttpClient dgClient = connection.GetClient<TaskAgentHttpClient>();
             
             // Create deployment groups
-            DeploymentGroup deploymentGroup = new DeploymentGroup()
+            DeploymentGroupCreateParameter deploymentGroupCreateParameter = new DeploymentGroupCreateParameter()
             {
                 Name = "MyDeploymentGroup1",
                 Description = "This deployment group is created to demnostrate the client usage"
             };
-            DeploymentGroup addedDeploymentGroup = dgClient.AddDeploymentGroupAsync(this.ProjectName, deploymentGroup).Result;
+            DeploymentGroup addedDeploymentGroup = dgClient.AddDeploymentGroupAsync(this.ProjectName, deploymentGroupCreateParameter).Result;
 
             DeploymentGroupId = addedDeploymentGroup.Id;
             return addedDeploymentGroup;
@@ -113,11 +113,14 @@ namespace Microsoft.TeamServices.Samples.Client.DistributedTask
 
             // Get deployment group and change properties to be updated
             DeploymentGroup deploymentGroup = dgClient.GetDeploymentGroupAsync(this.ProjectName, this.DeploymentGroupId).Result;
-            deploymentGroup.Name = "MyDeploymentGroup1" + "-Update1";
-            deploymentGroup.Description = "Description of this deployment group is updated";
+            DeploymentGroupUpdateParameter deploymentGroupUpdateParameter = new DeploymentGroupUpdateParameter
+            {
+                Name = deploymentGroup.Name + "-Update1",
+                Description = "Description of this deployment group is updated"
+            };
 
             // Update deployment group
-            DeploymentGroup updatedDeploymentGroup = dgClient.UpdateDeploymentGroupAsync(this.ProjectName, this.DeploymentGroupId, deploymentGroup).Result;
+            DeploymentGroup updatedDeploymentGroup = dgClient.UpdateDeploymentGroupAsync(this.ProjectName, this.DeploymentGroupId, deploymentGroupUpdateParameter).Result;
 
             return updatedDeploymentGroup;
         }
@@ -164,12 +167,12 @@ namespace Microsoft.TeamServices.Samples.Client.DistributedTask
 
                 if (existingDeploymentGroup == null)
                 {
-                    DeploymentGroup deploymentGroup = new DeploymentGroup()
+                    DeploymentGroupCreateParameter deploymentGroupCreateParameter = new DeploymentGroupCreateParameter()
                     {
                         Name = deploymentGroupName,
                         Description = "This deployment group is created to demnostrate the client usage"
                     };
-                    newDeploymentGroup = dgClient.AddDeploymentGroupAsync(this.ProjectName, deploymentGroup).Result;
+                    newDeploymentGroup = dgClient.AddDeploymentGroupAsync(this.ProjectName, deploymentGroupCreateParameter).Result;
                     addedDeploymentGroups.Add(newDeploymentGroup);
                 }
                 else
