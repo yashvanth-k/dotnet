@@ -7,9 +7,11 @@ using System.Linq;
 using System.Net.Http;
 using Microsoft.VisualStudio.Services.ReleaseManagement.WebApi.Clients;
 using Microsoft.VisualStudio.Services.ReleaseManagement.WebApi.Contracts;
+using Microsoft.VisualStudio.Services.ReleaseManagement.WebApi.Security;
 using Newtonsoft.Json;
 
 using WebApiRelease = Microsoft.VisualStudio.Services.ReleaseManagement.WebApi.Release;
+using Microsoft.VisualStudio.Services.Security.Client;
 
 namespace Microsoft.TeamServices.Samples.Client.Release
 {
@@ -485,6 +487,29 @@ namespace Microsoft.TeamServices.Samples.Client.Release
             releaseClient.DeleteReleaseDefinitionAsync(project: projectName, definitionId: newlyCreatedReleaseDefinitionId).SyncResult();
 
         }
+
+        [ClientSampleMethod]
+        public void GetReleaseDefinitionAccessControlLists()
+        {
+            VssConnection connection = Context.Connection;
+            var project = ClientSampleHelpers.FindAnyProject(this.Context);
+
+            // We need the security client to talk to RM service instead of the default TFS to get us the ACLs for release definition
+            SecurityHttpClient securityHttpClient = connection.GetClient<SecurityHttpClient>(Guid.Parse(ReleaseManagementApiConstants.InstanceType));
+            var acls = securityHttpClient.QueryAccessControlListsAsync(
+                SecurityConstants.ReleaseManagementSecurityNamespaceId,
+                CreateToken(project.Id, newlyCreatedReleaseDefinitionId),
+                null, // all desciptors
+                true,
+                true).Result;
+        }
+
+        private static string CreateToken(Guid projectId, int releaseDefinitionId) 
+        {
+            const string tokenNameFormat = "{0}/{1}";
+            return string.Format(tokenNameFormat, projectId, releaseDefinitionId);
+        }
+
 
         private static WebApiRelease CreateRelease(ReleaseHttpClient releaseClient, int releaseDefinitionId, string projectName)
         {
