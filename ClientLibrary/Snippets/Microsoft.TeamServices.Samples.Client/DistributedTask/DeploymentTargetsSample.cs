@@ -121,7 +121,6 @@ namespace Microsoft.TeamServices.Samples.Client.DistributedTask
                 DeploymentTargetUpdateParameter targetUpdate = new DeploymentTargetUpdateParameter
                 {
                     Id = target.Id,
-                    Agent = new DeploymentTargetUpdateParameterAgentProperty { Id = target.Agent.Id },
                     Tags = target.Tags
                 };
                 targetUpdate.Tags.Add("newTag" + DateTime.UtcNow.ToBinary());
