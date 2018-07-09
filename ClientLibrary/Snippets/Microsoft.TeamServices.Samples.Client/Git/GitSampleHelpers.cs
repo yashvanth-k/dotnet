@@ -1,4 +1,5 @@
-﻿using Microsoft.TeamFoundation.SourceControl.WebApi;
+﻿using Microsoft.TeamFoundation.Core.WebApi;
+using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,14 @@ namespace Microsoft.TeamServices.Samples.Client.Git
 {
     public class GitSampleHelpers
     {
+        private const string c_samplesProjectName = "GitSamples";
+
+        public static TeamProjectReference FindGitProject(ClientSampleContext context)
+        {
+            TeamProjectReference project = ClientSampleHelpers.FindProjectByName(context, c_samplesProjectName);
+            return project ?? ClientSampleHelpers.FindAnyProject(context);
+        }
+
         public static GitRepository FindAnyRepositoryOnAnyProject(ClientSampleContext context)
         {
             Guid projectId = ClientSampleHelpers.FindAnyProject(context).Id;

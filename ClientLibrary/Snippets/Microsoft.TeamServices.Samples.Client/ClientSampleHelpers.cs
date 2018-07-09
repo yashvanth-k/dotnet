@@ -19,6 +19,27 @@ namespace Microsoft.TeamServices.Samples.Client
     /// </summary>
     public static class ClientSampleHelpers
     {
+        public static TeamProjectReference FindProjectByName(ClientSampleContext context, string projectName)
+        {
+            VssConnection connection = context.Connection;
+            ProjectHttpClient projectClient = connection.GetClient<ProjectHttpClient>();
+
+            TeamProjectReference project;
+            using (new ClientSampleHttpLoggerOutputSuppression())
+            {
+                var availableProjects = projectClient.GetProjects().Result;
+                project = availableProjects.FirstOrDefault(p => 
+                    string.Equals(p.Name, projectName, StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            if (project != null)
+            {
+                context.SetValue<TeamProjectReference>("$defautProject", project);
+            }
+
+            return project;
+        }
+
         public static TeamProjectReference FindAnyProject(ClientSampleContext context)
         {
             TeamProjectReference project;

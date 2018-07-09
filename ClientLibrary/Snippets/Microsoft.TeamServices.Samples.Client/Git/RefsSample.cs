@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.Services.WebApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.TeamServices.Samples.Client.Git
 {
@@ -13,42 +11,122 @@ namespace Microsoft.TeamServices.Samples.Client.Git
     public class RefsSample : ClientSample
     {
         [ClientSampleMethod]
+        public IEnumerable<GitRef> ListAllRefs()
+        {
+            VssConnection connection = this.Context.Connection;
+            GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
+
+            TeamProjectReference project = GitSampleHelpers.FindGitProject(this.Context);
+            GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
+
+            List<GitRef> refs = gitClient.GetRefsAsync(project.Name, repo.Id).Result;
+
+            Console.WriteLine("project {0}, repo {1}", project.Name, repo.Name);
+            foreach (GitRef gitRef in refs)
+            {
+                Console.WriteLine("{0} {1} {2}", gitRef.Name, gitRef.ObjectId, gitRef.Url);
+            }
+
+            return refs;
+        }
+
+        [ClientSampleMethod]
         public IEnumerable<GitRef> ListBranches()
         {
             VssConnection connection = this.Context.Connection;
             GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
 
-            TeamProjectReference project = ClientSampleHelpers.FindAnyProject(this.Context);
+            TeamProjectReference project = GitSampleHelpers.FindGitProject(this.Context);
             GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
 
-            List<GitRef> refs = gitClient.GetRefsAsync(repo.Id, filter: "heads/").Result;
+            List<GitRef> refs = gitClient.GetRefsAsync(project.Name, repo.Id, filter: "heads/").Result;
 
             Console.WriteLine("project {0}, repo {1}", project.Name, repo.Name);
-            foreach(GitRef gitRef in refs)
+            foreach (GitRef gitRef in refs)
             {
                 Console.WriteLine("{0} {1} {2}", gitRef.Name, gitRef.ObjectId, gitRef.Url);
             }
 
-            return refs;            
+            return refs;
+        }
+
+        [ClientSampleMethod]
+        public IEnumerable<GitRef> ListBranchesWithStatuses()
+        {
+            VssConnection connection = this.Context.Connection;
+            GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
+
+            TeamProjectReference project = GitSampleHelpers.FindGitProject(this.Context);
+            GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
+
+            List<GitRef> refs = gitClient.GetRefsAsync(project.Name, repo.Id, filter: "heads/", includeStatuses: true).Result;
+
+            return refs;
+        }
+
+        [ClientSampleMethod]
+        public IEnumerable<GitRef> ListTags()
+        {
+            VssConnection connection = this.Context.Connection;
+            GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
+
+            TeamProjectReference project = GitSampleHelpers.FindGitProject(this.Context);
+            GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
+
+            List<GitRef> refs = gitClient.GetRefsAsync(project.Name, repo.Id, filter: "tags/").Result;
+
+            return refs;
         }
 
         [ClientSampleMethod]
         public GitRefUpdateResult CreateBranch()
         {
-            return CreateBranchInner(cleanUp: true);
+            return CreateBranchInner(true, out _);
         }
 
-        public GitRefUpdateResult CreateBranchInner(bool cleanUp)
-        {
 
+        [ClientSampleMethod]
+        public GitRef LockABranch()
+        {
+            VssConnection connection = this.Context.Connection;
+            GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
+
+            TeamProjectReference project = GitSampleHelpers.FindGitProject(this.Context);
+            GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
+
+            GitRef result = gitClient.UpdateRefAsync(
+                new GitRefUpdate() {
+                    IsLocked = true,
+                },
+                project: project.Name,
+                repositoryId: repo.Id,
+                filter: "heads/master").Result;
+
+            //Unlock the branch now
+            ClientSampleHttpLogger.SetSuppressOutput(this.Context, true);
+            gitClient.UpdateRefAsync(
+                new GitRefUpdate()
+                {
+                    IsLocked = false,
+                },
+                project: project.Name,
+                repositoryId: repo.Id,
+                filter: "heads/master");
+            ClientSampleHttpLogger.SetSuppressOutput(this.Context, false);
+
+            return result;
+        }
+
+        public GitRefUpdateResult CreateBranchInner(bool cleanUp, out TeamProjectReference project)
+        {
             VssConnection connection = this.Context.Connection;
             GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
 
             // find a project, repo, and source ref to branch from
-            TeamProjectReference project = ClientSampleHelpers.FindAnyProject(this.Context);
+            project = GitSampleHelpers.FindGitProject(this.Context);
             GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
             string defaultBranch = GitSampleHelpers.WithoutRefsPrefix(repo.DefaultBranch);
-            GitRef sourceRef = gitClient.GetRefsAsync(repo.Id, filter: defaultBranch).Result.First();
+            GitRef sourceRef = gitClient.GetRefsAsync(project.Name, repo.Id, filter: defaultBranch).Result.First();
 
             // create a new branch from the source
             GitRefUpdateResult refCreateResult = gitClient.UpdateRefsAsync(
@@ -57,6 +135,7 @@ namespace Microsoft.TeamServices.Samples.Client.Git
                     NewObjectId = sourceRef.ObjectId,
                     Name = $"refs/heads/vsts-api-sample/{GitSampleHelpers.ChooseRefsafeName()}",
                 } },
+                project: project.Name,
                 repositoryId: repo.Id).Result.First();
 
             Console.WriteLine("project {0}, repo {1}, source branch {2}", project.Name, repo.Name, sourceRef.Name);
@@ -74,11 +153,11 @@ namespace Microsoft.TeamServices.Samples.Client.Git
                             OldObjectId = refCreateResult.NewObjectId,
                             NewObjectId = new string('0', 40),
                             Name = refCreateResult.Name,
-
                         }
                     },
                     repositoryId: refCreateResult.RepositoryId).Result.First();
 
+                project = null;
                 return null;
             }
 
@@ -91,7 +170,7 @@ namespace Microsoft.TeamServices.Samples.Client.Git
             VssConnection connection = this.Context.Connection;
             GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
 
-            GitRefUpdateResult refCreateResult = this.CreateBranchInner(cleanUp: false);
+            GitRefUpdateResult refCreateResult = this.CreateBranchInner(false, out TeamProjectReference project);
 
             // delete the branch we just created
             GitRefUpdateResult refDeleteResult = gitClient.UpdateRefsAsync(
@@ -100,6 +179,7 @@ namespace Microsoft.TeamServices.Samples.Client.Git
                     NewObjectId = new string('0', 40),
                     Name = refCreateResult.Name,
                 } },
+                project: project.Name,
                 repositoryId: refCreateResult.RepositoryId).Result.First();
 
             Console.WriteLine("deleted branch {0} (success={1} status={2})", refDeleteResult.Name, refDeleteResult.Success, refDeleteResult.UpdateStatus);
