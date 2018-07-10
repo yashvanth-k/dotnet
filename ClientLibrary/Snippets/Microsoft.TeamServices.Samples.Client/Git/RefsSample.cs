@@ -21,12 +21,6 @@ namespace Microsoft.TeamServices.Samples.Client.Git
 
             List<GitRef> refs = gitClient.GetRefsAsync(project.Name, repo.Id).Result;
 
-            Console.WriteLine("project {0}, repo {1}", project.Name, repo.Name);
-            foreach (GitRef gitRef in refs)
-            {
-                Console.WriteLine("{0} {1} {2}", gitRef.Name, gitRef.ObjectId, gitRef.Url);
-            }
-
             return refs;
         }
 
@@ -40,12 +34,6 @@ namespace Microsoft.TeamServices.Samples.Client.Git
             GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
 
             List<GitRef> refs = gitClient.GetRefsAsync(project.Name, repo.Id, filter: "heads/").Result;
-
-            Console.WriteLine("project {0}, repo {1}", project.Name, repo.Name);
-            foreach (GitRef gitRef in refs)
-            {
-                Console.WriteLine("{0} {1} {2}", gitRef.Name, gitRef.ObjectId, gitRef.Url);
-            }
 
             return refs;
         }
