@@ -171,6 +171,7 @@
     <Compile Include="Tfvc\ChangesetChangesSample.cs" />
     <Compile Include="Tfvc\BranchesSample.cs" />
     <Compile Include="Tfvc\ChangesetsSample.cs" />
+    <Compile Include="Wiki\Helpers.cs" />
     <Compile Include="Wiki\Extensions.cs" />
     <Compile Include="Wiki\WikiAttachmentsSample.cs" />
     <Compile Include="Wiki\WikiPageMovesSample.cs" />

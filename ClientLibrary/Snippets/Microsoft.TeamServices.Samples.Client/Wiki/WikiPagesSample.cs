@@ -17,18 +17,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
-
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to create wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
             WikiPageCreateOrUpdateParameters parameters = new WikiPageCreateOrUpdateParameters()
             {
                 Content = "Wiki page content"
@@ -47,72 +36,40 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
         }
 
         [ClientSampleMethod]
-        public WikiPageResponse GetWikiPageJson()
+        public WikiPageResponse GetWikiPageMetadata()
         {
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
+            string somePagePath = Helpers.GetAnyWikiPagePath(this.Context, wiki);
 
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to get wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
-            WikiPage rootPage = wikiClient.GetPageAsync(
-                project: wiki.ProjectId,
-                wikiIdentifier: wiki.Name,
-                path: "/",
-                recursionLevel: VersionControlRecursionType.OneLevel).SyncResult().Page;
-
-            string somePagePath = rootPage.SubPages[0].Path;
             WikiPageResponse somePageResponse = wikiClient.GetPageAsync(
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Name,
                 path: somePagePath).SyncResult();
 
-            Console.WriteLine("Retrieved page '{0}' as JSON in wiki '{1}'", somePagePath, wiki.Name);
+            Console.WriteLine("Retrieved page '{0}' metadata in wiki '{1}'", somePagePath, wiki.Name);
 
             return somePageResponse;
         }
 
         [ClientSampleMethod]
-        public WikiPageResponse GetWikiPageJsonWithContent()
+        public WikiPageResponse GetWikiPageMetadataWithContent()
         {
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
+            string somePagePath = Helpers.GetAnyWikiPagePath(this.Context, wiki);
 
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to get wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
-            WikiPage rootPage = wikiClient.GetPageAsync(
-                project: wiki.ProjectId,
-                wikiIdentifier: wiki.Id,
-                path: "/",
-                recursionLevel: VersionControlRecursionType.OneLevel).SyncResult().Page;
-
-            string somePagePath = rootPage.SubPages[0].Path;
             WikiPageResponse WikiPageResponse = wikiClient.GetPageAsync(
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Id,
                 path: somePagePath,
                 includeContent: true).SyncResult();
 
-            Console.WriteLine("Retrieved page '{0}' as JSON in wiki '{1}' with content '{2}'", WikiPageResponse.Page.Path, wiki.Name, WikiPageResponse.Page.Content);
+            Console.WriteLine("Retrieved page '{0}' metadata in wiki '{1}' with content '{2}'", WikiPageResponse.Page.Path, wiki.Name, WikiPageResponse.Page.Content);
 
             return WikiPageResponse;
         }
@@ -123,18 +80,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
-
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to get wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
             WikiPageResponse rootPageResponse = wikiClient.GetPageAsync(
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Name,
@@ -156,26 +102,9 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
+            string somePagePath = Helpers.GetAnyWikiPagePath(this.Context, wiki);
 
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to get wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
-            WikiPage rootPage = wikiClient.GetPageAsync(
-                project: wiki.ProjectId,
-                wikiIdentifier: wiki.Id,
-                path: "/",
-                recursionLevel: VersionControlRecursionType.OneLevel).SyncResult().Page;
-
-            string somePagePath = rootPage.SubPages[0].Path;
-            
             using (var reader = new StreamReader(wikiClient.GetPageTextAsync(
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Id,
@@ -194,25 +123,9 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
+            string somePagePath = Helpers.GetAnyWikiPagePath(this.Context, wiki);
 
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to get wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
-            WikiPage rootPage = wikiClient.GetPageAsync(
-                project: wiki.ProjectId,
-                wikiIdentifier: wiki.Name,
-                path: "/",
-                recursionLevel: VersionControlRecursionType.OneLevel).SyncResult().Page;
-
-            string somePagePath = rootPage.SubPages[0].Path;
             WikiPageResponse pageResponse = wikiClient.GetPageAsync(
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Name,
@@ -253,25 +166,9 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
+            string somePagePath = Helpers.GetAnyWikiPagePath(this.Context, wiki);
 
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to get wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
-            WikiPage rootPage = wikiClient.GetPageAsync(
-                project: wiki.ProjectId,
-                wikiIdentifier: wiki.Id,
-                path: "/",
-                recursionLevel: VersionControlRecursionType.OneLevel).SyncResult().Page;
-
-            string somePagePath = rootPage.SubPages[0].Path;
             WikiPageResponse somePageResponse = wikiClient.DeletePageAsync(
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Id,

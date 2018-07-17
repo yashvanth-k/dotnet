@@ -14,18 +14,8 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
 
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to create wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
             var pageCreateParameters = new WikiPageCreateOrUpdateParameters()
             {
                 Content = "Wiki page content",
@@ -68,6 +58,10 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             Console.WriteLine("Page moved from '{0}' to '{1}'", pageMoveResponse.PageMove.Path, pageMoveResponse.PageMove.NewPath);
 
+            // Cleanup
+            ClientSampleHttpLogger.SetSuppressOutput(this.Context, true);
+            wikiClient.DeletePageAsync(wiki.ProjectId, wiki.Id, secondPagePath).SyncResult();
+
             return pageMoveResponse;
         }
 
@@ -77,18 +71,8 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
 
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to create wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
             var pageCreateParameters = new WikiPageCreateOrUpdateParameters()
             {
                 Content = "Wiki page content",
@@ -101,7 +85,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 pageCreateParameters,
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Name,
-                path: "SamplePage" + new Random().Next(1, 999),
+                path: firstPagePath,
                 Version: null).SyncResult();
 
             Console.WriteLine("Created page '{0}' in wiki '{1}'", firstPageResponse.Page.Path, wiki.Name);
@@ -112,7 +96,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 pageCreateParameters,
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Name,
-                path: "SamplePage" + new Random().Next(1, 999),
+                path: secondPagePath,
                 Version: null).SyncResult();
 
             Console.WriteLine("Created page '{0}' in wiki '{1}'", secondPageResponse.Page.Path, wiki.Name);
@@ -130,6 +114,11 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 wikiIdentifier: wiki.Name).SyncResult();
 
             Console.WriteLine("Page '{0}' moved to order '{1}'", pageMoveResponse.PageMove.Path, pageMoveResponse.PageMove.NewOrder);
+
+            // Cleanup
+            ClientSampleHttpLogger.SetSuppressOutput(this.Context, true);
+            wikiClient.DeletePageAsync(wiki.ProjectId, wiki.Id, firstPagePath).SyncResult();
+            wikiClient.DeletePageAsync(wiki.ProjectId, wiki.Id, secondPagePath).SyncResult();
 
             return pageMoveResponse;
         }

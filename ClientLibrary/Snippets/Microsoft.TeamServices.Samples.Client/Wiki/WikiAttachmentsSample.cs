@@ -17,18 +17,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
-
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
-
-            if (wikis == null || wikis.Count == 0)
-            {
-                Console.WriteLine("No wikis exist to create wiki page");
-
-                return null;
-            }
-
-            WikiV2 wiki = wikis[0];
+            WikiV2 wiki = Helpers.FindOrCreateProjectWiki(this.Context);
             Stream attachmentStream = File.OpenRead(
                 Path.Combine(
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),

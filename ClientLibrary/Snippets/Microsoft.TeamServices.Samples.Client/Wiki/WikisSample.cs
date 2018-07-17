@@ -8,7 +8,7 @@ using System.Linq;
 namespace Microsoft.TeamServices.Samples.Client.Wiki
 {
     [ClientSample(WikiConstants.AreaName, WikiConstants.WikisResourceName)]
-    public class WikiV2Sample : ClientSample
+    public class WikisSample : ClientSample
     {
         [ClientSampleMethod]
         public WikiV2 CreateProjectWikiIfNotExisting()
@@ -17,7 +17,6 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
             Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
-
             List<WikiV2> wikis = wikiClient.GetAllWikisAsync(projectId).SyncResult();
 
             WikiV2 createdWiki = null;
@@ -61,14 +60,14 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             WikiV2 createdWiki = null;
             Guid repositoryId = repositories[0].Id;
-            // No project wiki existing. Create one.
+            
             var createParameters = new WikiCreateParametersV2()
             {
                 Name = "sampleCodeWiki",
                 ProjectId = projectId,
                 RepositoryId = repositoryId,
                 Type = WikiType.CodeWiki,
-                MappedPath = "/docs",      // a folder path in the repository
+                MappedPath = "/",      // any folder path in the repository
                 Version = new GitVersionDescriptor()
                 {
                     Version = "master"
@@ -79,6 +78,10 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             Console.WriteLine("Created wiki with name '{0}' in project '{1}'", createdWiki.Name, createdWiki.ProjectId);
 
+            // Cleanup
+            ClientSampleHttpLogger.SetSuppressOutput(this.Context, true);
+            wikiClient.DeleteWikiAsync(createdWiki.Id).SyncResult();
+
             return createdWiki;
         }
 
@@ -88,9 +91,9 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
+            WikiV2 existingWiki = Helpers.FindOrCreateCodeWiki(this.Context);
 
-            WikiV2 wiki = wikiClient.GetWikiAsync(projectId, "sampleProjectWiki").SyncResult();
+            WikiV2 wiki = wikiClient.GetWikiAsync(existingWiki.ProjectId, existingWiki.Name).SyncResult();
 
             Console.WriteLine("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
 
@@ -103,11 +106,9 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
-            List<WikiV2> allWikis = wikiClient.GetAllWikisAsync().SyncResult();
+            WikiV2 existingWiki = Helpers.FindOrCreateCodeWiki(this.Context);
 
-
-            WikiV2 wiki = wikiClient.GetWikiAsync(allWikis[0].Id).SyncResult();
+            WikiV2 wiki = wikiClient.GetWikiAsync(existingWiki.Id).SyncResult();
 
             Console.WriteLine("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
 
@@ -154,19 +155,8 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             VssConnection connection = this.Context.Connection;
             GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
-            
-            // Get all the existing wikis
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync().SyncResult();
 
-            // Get the code wiki for which we need to update the versions
-            WikiV2 codeWiki = wikis.Where(wiki => wiki.Type == WikiType.CodeWiki).FirstOrDefault();
-            
-            if (codeWiki == null)
-            {
-                Console.WriteLine("No code wiki to continue the update operation.");
-            
-                return null;
-            }
+            WikiV2 codeWiki = Helpers.FindOrCreateCodeWiki(this.Context);
 
             // Get the versions in that wiki
             List<GitVersionDescriptor> versions = codeWiki.Versions.ToList();
@@ -198,14 +188,9 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
         public WikiV2 DeleteCodeWiki()
         {
             VssConnection connection = this.Context.Connection;
-            GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
             WikiHttpClient wikiClient = connection.GetClient<WikiHttpClient>();
 
-            // Get all the existing wikis
-            List<WikiV2> wikis = wikiClient.GetAllWikisAsync().SyncResult();
-
-            // Get the code wiki for which we need to update the versions
-            WikiV2 codeWiki = wikis.Where(wiki => wiki.Type == WikiType.CodeWiki).FirstOrDefault();
+            WikiV2 codeWiki = Helpers.FindOrCreateCodeWiki(this.Context);
 
             WikiV2 deletedWiki = wikiClient.DeleteWikiAsync(codeWiki.ProjectId, codeWiki.Name).SyncResult();
 
