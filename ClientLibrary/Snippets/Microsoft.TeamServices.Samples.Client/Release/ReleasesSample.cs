@@ -495,7 +495,7 @@ namespace Microsoft.TeamServices.Samples.Client.Release
             VssConnection connection = Context.Connection;
             ReleaseHttpClient2 releaseClient = connection.GetClient<ReleaseHttpClient2>();
 
-            var releaseDefinitions = releaseClient.GetReleaseDefinitionsAsync(project: projectName).Result;
+            List<ReleaseDefinition> releaseDefinitions = releaseClient.GetReleaseDefinitionsAsync(project: projectName).Result;
 
             int releaseDefinitionId = releaseDefinitions.FirstOrDefault().Id;
 
@@ -521,7 +521,7 @@ namespace Microsoft.TeamServices.Samples.Client.Release
             // Show the deployments
             foreach (Deployment deployment in deployments)
             {
-                Console.WriteLine("{0} {1}", deployment.Id.ToString().PadLeft(6), deployment.DeploymentStatus);
+                Context.Log("{0} {1}", deployment.Id.ToString().PadLeft(6), deployment.DeploymentStatus);
             }
 
             return deployments;
