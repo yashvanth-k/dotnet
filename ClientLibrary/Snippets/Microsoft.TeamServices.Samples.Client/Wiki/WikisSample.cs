@@ -38,11 +38,11 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
                 createdWiki = wikiClient.CreateWikiAsync(createParameters).SyncResult();
 
-                Console.WriteLine("Created wiki with name '{0}' in project '{1}'", createdWiki.Name, createdWiki.ProjectId);
+                Context.Log("Created wiki with name '{0}' in project '{1}'", createdWiki.Name, createdWiki.ProjectId);
             }
             else
             {
-                Console.WriteLine("Project wiki already exists for this project.");
+                Context.Log("Project wiki already exists for this project.");
             }
 
             return createdWiki;            
@@ -76,7 +76,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             createdWiki = wikiClient.CreateWikiAsync(createParameters).SyncResult();
 
-            Console.WriteLine("Created wiki with name '{0}' in project '{1}'", createdWiki.Name, createdWiki.ProjectId);
+            Context.Log("Created wiki with name '{0}' in project '{1}'", createdWiki.Name, createdWiki.ProjectId);
 
             // Cleanup
             ClientSampleHttpLogger.SetSuppressOutput(this.Context, true);
@@ -95,7 +95,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             WikiV2 wiki = wikiClient.GetWikiAsync(existingWiki.ProjectId, existingWiki.Name).SyncResult();
 
-            Console.WriteLine("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
+            Context.Log("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
 
             return wiki;
         }
@@ -110,7 +110,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             WikiV2 wiki = wikiClient.GetWikiAsync(existingWiki.Id).SyncResult();
 
-            Console.WriteLine("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
+            Context.Log("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
 
             return wiki;
         }
@@ -127,7 +127,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             foreach (WikiV2 wiki in wikis)
             {
-                Console.WriteLine("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
+                Context.Log("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
             }
 
             return wikis;
@@ -143,7 +143,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             foreach (WikiV2 wiki in wikis)
             {
-                Console.WriteLine("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
+                Context.Log("Retrieved wiki with name '{0}' in project '{1}'", wiki.Name, wiki.ProjectId);
             }
 
             return wikis;
@@ -178,8 +178,8 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             WikiV2 updatedCodeWiki = wikiClient.UpdateWikiAsync(updateParams, codeWiki.ProjectId, codeWiki.Name).SyncResult();
 
-            Console.WriteLine("Updated wiki with name '{0}' in project '{1}'", updatedCodeWiki.Name, updatedCodeWiki.ProjectId);
-            Console.WriteLine("Updated versions are : {0}", string.Join(",", updatedCodeWiki.Versions.Select(v => v.Version)));
+            Context.Log("Updated wiki with name '{0}' in project '{1}'", updatedCodeWiki.Name, updatedCodeWiki.ProjectId);
+            Context.Log("Updated versions are : {0}", string.Join(",", updatedCodeWiki.Versions.Select(v => v.Version)));
             
             return updatedCodeWiki;
         }
@@ -194,7 +194,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             WikiV2 deletedWiki = wikiClient.DeleteWikiAsync(codeWiki.ProjectId, codeWiki.Name).SyncResult();
 
-            Console.WriteLine("Deleted wiki with name '{0}' in project '{1}'", deletedWiki.Name, deletedWiki.ProjectId);
+            Context.Log("Deleted wiki with name '{0}' in project '{1}'", deletedWiki.Name, deletedWiki.ProjectId);
 
             return deletedWiki;
         }

@@ -31,7 +31,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: firstPagePath,
                 Version: null).SyncResult();
 
-            Console.WriteLine("Created page '{0}' in wiki '{1}'", firstPageResponse.Page.Path, wiki.Name);
+            Context.Log("Created page '{0}' in wiki '{1}'", firstPageResponse.Page.Path, wiki.Name);
 
             // Second page
             string secondPagePath = "SamplePage" + (randomNumber + 1);
@@ -42,7 +42,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: secondPagePath,
                 Version: null).SyncResult();
 
-            Console.WriteLine("Created page '{0}' in wiki '{1}'", secondPageResponse.Page.Path, wiki.Name);
+            Context.Log("Created page '{0}' in wiki '{1}'", secondPageResponse.Page.Path, wiki.Name);
 
             var pageMoveParameters = new WikiPageMoveParameters()
             {
@@ -56,7 +56,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Id).SyncResult();
 
-            Console.WriteLine("Page moved from '{0}' to '{1}'", pageMoveResponse.PageMove.Path, pageMoveResponse.PageMove.NewPath);
+            Context.Log("Page moved from '{0}' to '{1}'", pageMoveResponse.PageMove.Path, pageMoveResponse.PageMove.NewPath);
 
             // Cleanup
             ClientSampleHttpLogger.SetSuppressOutput(this.Context, true);
@@ -88,7 +88,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: firstPagePath,
                 Version: null).SyncResult();
 
-            Console.WriteLine("Created page '{0}' in wiki '{1}'", firstPageResponse.Page.Path, wiki.Name);
+            Context.Log("Created page '{0}' in wiki '{1}'", firstPageResponse.Page.Path, wiki.Name);
 
             // Second page
             string secondPagePath = "SamplePage" + (randomNumber + 1);
@@ -99,7 +99,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: secondPagePath,
                 Version: null).SyncResult();
 
-            Console.WriteLine("Created page '{0}' in wiki '{1}'", secondPageResponse.Page.Path, wiki.Name);
+            Context.Log("Created page '{0}' in wiki '{1}'", secondPageResponse.Page.Path, wiki.Name);
 
             var pageMoveParameters = new WikiPageMoveParameters()
             {
@@ -113,7 +113,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 project: wiki.ProjectId,
                 wikiIdentifier: wiki.Name).SyncResult();
 
-            Console.WriteLine("Page '{0}' moved to order '{1}'", pageMoveResponse.PageMove.Path, pageMoveResponse.PageMove.NewOrder);
+            Context.Log("Page '{0}' moved to order '{1}'", pageMoveResponse.PageMove.Path, pageMoveResponse.PageMove.NewOrder);
 
             // Cleanup
             ClientSampleHttpLogger.SetSuppressOutput(this.Context, true);

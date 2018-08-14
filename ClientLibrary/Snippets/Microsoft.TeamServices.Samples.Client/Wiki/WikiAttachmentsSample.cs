@@ -29,7 +29,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 wikiIdentifier: wiki.Id,
                 name: "Attachment" + new Random().Next(0, 999) + ".png").SyncResult();
 
-            Console.WriteLine("Attachment '{0}' added to wiki '{1}'", attachmentResponse.Attachment.Name, wiki.Name);
+            Context.Log("Attachment '{0}' added to wiki '{1}'", attachmentResponse.Attachment.Name, wiki.Name);
 
             return attachmentResponse;
         }

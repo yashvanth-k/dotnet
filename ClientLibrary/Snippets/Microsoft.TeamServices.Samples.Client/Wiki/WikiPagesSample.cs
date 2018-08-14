@@ -30,7 +30,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: "SamplePage" + new Random().Next(1, 999),
                 Version: null).SyncResult();
 
-            Console.WriteLine("Create page '{0}' in wiki '{1}'", wikiPageResponse.Page.Path, wiki.Name);
+            Context.Log("Create page '{0}' in wiki '{1}'", wikiPageResponse.Page.Path, wiki.Name);
 
             return wikiPageResponse;
         }
@@ -49,7 +49,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 wikiIdentifier: wiki.Name,
                 path: somePagePath).SyncResult();
 
-            Console.WriteLine("Retrieved page '{0}' metadata in wiki '{1}'", somePagePath, wiki.Name);
+            Context.Log("Retrieved page '{0}' metadata in wiki '{1}'", somePagePath, wiki.Name);
 
             return somePageResponse;
         }
@@ -69,7 +69,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: somePagePath,
                 includeContent: true).SyncResult();
 
-            Console.WriteLine("Retrieved page '{0}' metadata in wiki '{1}' with content '{2}'", WikiPageResponse.Page.Path, wiki.Name, WikiPageResponse.Page.Content);
+            Context.Log("Retrieved page '{0}' metadata in wiki '{1}' with content '{2}'", WikiPageResponse.Page.Path, wiki.Name, WikiPageResponse.Page.Content);
 
             return WikiPageResponse;
         }
@@ -87,10 +87,10 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: "/",
                 recursionLevel: VersionControlRecursionType.OneLevel).SyncResult();
 
-            Console.WriteLine("Retrieved the following subpages for the root page:");
+            Context.Log("Retrieved the following subpages for the root page:");
             foreach (WikiPage subPage in rootPageResponse.Page.SubPages)
             {
-                Console.WriteLine("Sub-page : '{0}'", subPage.Path);
+                Context.Log("Sub-page : '{0}'", subPage.Path);
             }
 
             return rootPageResponse;
@@ -111,7 +111,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 path: somePagePath).SyncResult()))
             {
                 string pageContent = reader.ReadToEnd();
-                Console.WriteLine("Retrieved page '{0}' in wiki '{1}' with content '{2}'", somePagePath, wiki.Name, pageContent);
+                Context.Log("Retrieved page '{0}' in wiki '{1}' with content '{2}'", somePagePath, wiki.Name, pageContent);
 
                 return pageContent;
             }
@@ -134,7 +134,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
 
             WikiPage somePage = pageResponse.Page;
 
-            Console.WriteLine("Retrieved page '{0}' as JSON in wiki '{1}' with content '{2}'", somePage.Path, wiki.Name, somePage.Content);
+            Context.Log("Retrieved page '{0}' as JSON in wiki '{1}' with content '{2}'", somePage.Path, wiki.Name, somePage.Content);
 
             var originalContent = somePage.Content;
             var originalVersion = pageResponse.ETag.ToList()[0];
@@ -154,8 +154,8 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
             var updatedContent = editedPageResponse.Page.Content;
             var updatedVersion = editedPageResponse.ETag.ToList()[0];
 
-            Console.WriteLine("Before editing --> Page path: {0}, version: {1}, content: {2}", somePage.Path, originalVersion, originalContent);
-            Console.WriteLine("After editing --> Page path: {0}, version: {1}, content: {2}", somePage.Path, updatedVersion, updatedContent);
+            Context.Log("Before editing --> Page path: {0}, version: {1}, content: {2}", somePage.Path, originalVersion, originalContent);
+            Context.Log("After editing --> Page path: {0}, version: {1}, content: {2}", somePage.Path, updatedVersion, updatedContent);
 
             return editedPageResponse;
         }
@@ -174,7 +174,7 @@ namespace Microsoft.TeamServices.Samples.Client.Wiki
                 wikiIdentifier: wiki.Id,
                 path: somePagePath).SyncResult();
 
-            Console.WriteLine("Deleted page '{0}' from wiki '{1}'", somePagePath, wiki.Name);
+            Context.Log("Deleted page '{0}' from wiki '{1}'", somePagePath, wiki.Name);
 
             return somePageResponse;
         }
