@@ -487,7 +487,7 @@ namespace Microsoft.TeamServices.Samples.Client.Release
         }
         
         [ClientSampleMethod]
-        public IEnumerable<Deployment> ListAllDeploymentsForADefinitionId()
+        public IEnumerable<Deployment> ListAllDeploymentsForASpecificReleaseDefinitionId()
         {
             string projectName = ClientSampleHelpers.FindAnyProject(this.Context).Name;
 
