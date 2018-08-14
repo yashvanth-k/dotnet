@@ -409,7 +409,7 @@ namespace Microsoft.TeamServices.Samples.Client.Release
         }
 
         [ClientSampleMethod]
-        public IEnumerable<ReleaseApproval> ListPendingApprovalsForASpecificARelease()
+        public IEnumerable<Deployment> ListAllDeploymentsForADefinitionId()
         {
             string projectName = ClientSampleHelpers.FindAnyProject(this.Context).Name;
 
@@ -417,36 +417,36 @@ namespace Microsoft.TeamServices.Samples.Client.Release
             VssConnection connection = Context.Connection;
             ReleaseHttpClient2 releaseClient = connection.GetClient<ReleaseHttpClient2>();
 
-            var releases = releaseClient.GetReleasesAsync(project: projectName).Result;
+            var releaseDefinitions = releaseClient.GetReleaseDefinitionsAsync(project: projectName).Result;
 
-            int releaseIdFilter = releases.FirstOrDefault().Id;
+            int releaseDefinitionId = releaseDefinitions.FirstOrDefault().Id;
 
-            List<ReleaseApproval> releaseApprovals = new List<ReleaseApproval>();
+            List<Deployment> deployments = new List<Deployment>();
 
-            // Iterate (as needed) to get the full set of approvals
+            // Iterate (as needed) to get the full set of deployments
             int continuationToken = 0;
             bool parseResult;
             do
             {
-                IPagedCollection<ReleaseApproval> releaseApprovalsPage = releaseClient.GetApprovalsAsync2(project: projectName, releaseIdsFilter: new List<int> { releaseIdFilter }, continuationToken: continuationToken).Result;
+                IPagedCollection<Deployment> releaseDeploymentsPage = releaseClient.GetDeploymentsAsync2(project: projectName, definitionId: releaseDefinitionId, continuationToken: continuationToken).Result;
 
-                releaseApprovals.AddRange(releaseApprovalsPage);
+                deployments.AddRange(releaseDeploymentsPage);
 
                 int parsedContinuationToken = 0;
-                parseResult = int.TryParse(releaseApprovalsPage.ContinuationToken, out parsedContinuationToken);
+                parseResult = int.TryParse(releaseDeploymentsPage.ContinuationToken, out parsedContinuationToken);
                 if (parseResult)
                 {
                     continuationToken = parsedContinuationToken;
                 }
             } while ((continuationToken != 0) && parseResult);
 
-            // Show the approvals
-            foreach (ReleaseApproval releaseApproval in releaseApprovals)
+            // Show the deployments
+            foreach (Deployment deployment in deployments)
             {
-                Console.WriteLine("{0} {1}", releaseApproval.Id.ToString().PadLeft(6), releaseApproval.Status);
+                Console.WriteLine("{0} {1}", deployment.Id.ToString().PadLeft(6), deployment.DeploymentStatus);
             }
 
-            return releaseApprovals;
+            return deployments;
         }
 
         [ClientSampleMethod]
@@ -484,6 +484,43 @@ namespace Microsoft.TeamServices.Samples.Client.Release
             // delete release definition
             releaseClient.DeleteReleaseDefinitionAsync(project: projectName, definitionId: newlyCreatedReleaseDefinitionId).SyncResult();
 
+        }
+        
+        [ClientSampleMethod]
+        public IEnumerable<Deployment> ListAllDeploymentsForADefinitionId()
+        {
+            string projectName = ClientSampleHelpers.FindAnyProject(this.Context).Name;
+
+            // Get a release client instance
+            VssConnection connection = Context.Connection;
+            ReleaseHttpClient2 releaseClient = connection.GetClient<ReleaseHttpClient2>();
+
+            List<Deployment> deployments = new List<Deployment>();
+
+            // Iterate (as needed) to get the full set of deployments
+            int continuationToken = 0;
+            bool parseResult;
+            do
+            {
+                IPagedCollection<Deployment> releaseDeploymentsPage = releaseClient.GetDeploymentsAsync2(project: projectName, definitionId: newlyCreatedReleaseDefinitionId, continuationToken: continuationToken).Result;
+
+                deployments.AddRange(releaseDeploymentsPage);
+
+                int parsedContinuationToken = 0;
+                parseResult = int.TryParse(releaseDeploymentsPage.ContinuationToken, out parsedContinuationToken);
+                if (parseResult)
+                {
+                    continuationToken = parsedContinuationToken;
+                }
+            } while ((continuationToken != 0) && parseResult);
+
+            // Show the deployments
+            foreach (Deployment deployment in deployments)
+            {
+                Console.WriteLine("{0} {1}", deployment.Id.ToString().PadLeft(6), deployment.DeploymentStatus);
+            }
+
+            return deployments;
         }
 
         private static WebApiRelease CreateRelease(ReleaseHttpClient releaseClient, int releaseDefinitionId, string projectName)
