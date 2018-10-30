@@ -15,7 +15,7 @@ Take a minute to explore the repo. It contains short snippets as well as longer 
 
 For .NET developers, the primary (and highly recommended) way to integrate with Team Services and Team Foundation Server is via our public .NET client libraries available on Nuget. [Microsoft.TeamFoundationServer.Client](https://www.nuget.org/packages/Microsoft.TeamFoundationServer.Client) is the most popular Nuget package and contains clients for interacting with work item tracking, Git, version control, build, release management and other services.
 
-See the [Team Services client library documentation](https://www.visualstudio.com/docs/integrate/get-started/client-libraries/dotnet) for more details.
+See the [Azure DevOps Services client library documentation](https://www.visualstudio.com/docs/integrate/get-started/client-libraries/dotnet) for more details.
 
 ### Sample console program
 
