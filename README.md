@@ -1,12 +1,12 @@
-# .NET samples for Visual Studio Team Services
+# .NET samples for Azure DevOps Services
 
 [![buildstatus](https://mseng.visualstudio.com/_apis/public/build/definitions/b924d696-3eae-4116-8443-9a18392d8544/5045/badge)](https://mseng.visualstudio.com/VSOnline/Open%20ALM/_build/index?context=mine&path=%5C&definitionId=5045&_a=completed)
 
-This repository contains C# samples that show how to integrate with Team Services and Team Foundation Server using our [public client libraries](https://www.nuget.org/profiles/nugetvss), service hooks, and more.
+This repository contains C# samples that show how to integrate with Azure DevOps Services and Azure DevOps Server using our [public client libraries](https://www.nuget.org/profiles/nugetvss), service hooks, and more.
 
 ## Explore the samples
 
-Take a minute to explore the repo. It contains short snippets as well as longer examples that demonstrate how to integrate with Team Services and Team Foundation
+Take a minute to explore the repo. It contains short snippets as well as longer examples that demonstrate how to integrate with Azure DevOps Services and Azure DevOps Server:
 
 * **Snippets**: short reusable code blocks demonstrating how to call specific APIs.
 * **Quickstarts**: self-contained programs demonstrating a specific scenario, typically by calling multiple APIs.
