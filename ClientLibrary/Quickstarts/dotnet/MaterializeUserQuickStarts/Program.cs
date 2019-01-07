@@ -15,6 +15,7 @@ namespace MaterializeUserQuickStarts
         static void Main(string[] args)
         {
             AuthenticationContext ctx = GetAuthenticationContext(null);
+            //GUIDs are for Azure DevOps App ID and Visual Studio Client ID and don't need to be changed 
             AuthenticationResult result = ctx.AcquireTokenAsync("499b84ac-1321-427f-aa17-267ca6975798", "872cd9fa-d31f-45e0-9eab-6e460a02d1f1", new UserPasswordCredential(userName, password)).Result;
             var bearerAuthHeader = new AuthenticationHeaderValue("Bearer", result.AccessToken);
             
