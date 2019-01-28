@@ -83,7 +83,7 @@ namespace Microsoft.TeamServices.Samples.Client.Work
             return result;
         }
         
-                [ClientSampleMethod]
+        [ClientSampleMethod]
         public TeamMemberCapacityIdentityRef GetTeamMemberCapacity()
         {
             VssConnection connection = Context.Connection;
