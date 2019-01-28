@@ -93,11 +93,11 @@ namespace Microsoft.TeamServices.Samples.Client.Work
             Guid teamId = ClientSampleHelpers.FindAnyTeam(this.Context, projectId).Id;
             Guid userId = ClientSampleHelpers.GetCurrentUserId(this.Context);
 
-            var teamContext = new TeamContext(projectId, teamId);
+            TeamContext teamContext = new TeamContext(projectId, teamId);
             List<TeamSettingsIteration> result = workClient.GetTeamIterationsAsync(teamContext, "current").Result;
-            var iterationId = result[0].Id;
+            Guid iterationId = result[0].Id;
 
-            var capacity = workClient.GetCapacityWithIdentityRefAsync(teamContext, iterationId, userId).Result;
+            TeamMemberCapacityIdentityRef capacity = workClient.GetCapacityWithIdentityRefAsync(teamContext, iterationId, userId).Result;
 
             return capacity;
         }
@@ -111,11 +111,11 @@ namespace Microsoft.TeamServices.Samples.Client.Work
             Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
             Guid teamId = ClientSampleHelpers.FindAnyTeam(this.Context, projectId).Id;
 
-            var teamContext = new TeamContext(projectId, teamId);
+            TeamContext teamContext = new TeamContext(projectId, teamId);
             List<TeamSettingsIteration> result = workClient.GetTeamIterationsAsync(teamContext, "current").Result;
-            var iterationId = result[0].Id;
+            Guid iterationId = result[0].Id;
 
-            var capacity = workClient.GetCapacitiesWithIdentityRefAsync(teamContext, iterationId).Result;
+            List<TeamMemberCapacityIdentityRef> capacity = workClient.GetCapacitiesWithIdentityRefAsync(teamContext, iterationId).Result;
 
             return capacity;
         }
@@ -130,18 +130,18 @@ namespace Microsoft.TeamServices.Samples.Client.Work
             Guid teamId = ClientSampleHelpers.FindAnyTeam(this.Context, projectId).Id;
             Guid userId = ClientSampleHelpers.GetCurrentUserId(this.Context);
 
-            var teamContext = new TeamContext(projectId, teamId);
+            TeamContext teamContext = new TeamContext(projectId, teamId);
             List<TeamSettingsIteration> result = workClient.GetTeamIterationsAsync(teamContext, "current").Result;
-            var iterationId = result[0].Id;
+            Guid iterationId = result[0].Id;
 
-            var capacity = workClient.GetCapacityAsync(teamContext, iterationId, userId).Result;
-            var capacityPatch = new CapacityPatch()
+            TeamMemberCapacityIdentityRef capacity = workClient.GetCapacityWithIdentityRefAsync(teamContext, iterationId, userId).Result;
+            CapacityPatch capacityPatch = new CapacityPatch()
             {
                 Activities = capacity.Activities.Select(a => { return new Activity { Name = a.Name, CapacityPerDay = a.CapacityPerDay + 1 }; }),
                 DaysOff = capacity.DaysOff
             };
 
-            var updatedCapacity = workClient.UpdateCapacityWithIdentityRefAsync(capacityPatch, teamContext, iterationId, userId).Result;
+            TeamMemberCapacityIdentityRef updatedCapacity = workClient.UpdateCapacityWithIdentityRefAsync(capacityPatch, teamContext, iterationId, userId).Result;
 
             return updatedCapacity;
         }
@@ -155,11 +155,11 @@ namespace Microsoft.TeamServices.Samples.Client.Work
             Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
             Guid teamId = ClientSampleHelpers.FindAnyTeam(this.Context, projectId).Id;
 
-            var teamContext = new TeamContext(projectId, teamId);
+            TeamContext teamContext = new TeamContext(projectId, teamId);
             List<TeamSettingsIteration> result = workClient.GetTeamIterationsAsync(teamContext, "current").Result;
-            var iterationId = result[0].Id;
+            Guid iterationId = result[0].Id;
 
-            var capacity = workClient.GetCapacitiesWithIdentityRefAsync(teamContext, iterationId).Result;
+            List<TeamMemberCapacityIdentityRef> capacity = workClient.GetCapacitiesWithIdentityRefAsync(teamContext, iterationId).Result;
             var updatedCapacity = capacity.Select(teamMemberCapacity =>
             {
                 return new TeamMemberCapacityIdentityRef()
