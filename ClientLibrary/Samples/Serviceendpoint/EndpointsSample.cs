@@ -30,26 +30,26 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Serviceendpoint
             // Show details about each type in the console
             foreach(ServiceEndpointType t in types)
             {
-                Console.WriteLine(t.Name);
+                Context.Log(t.Name);
 
-                Console.WriteLine("Inputs:");
+                Context.Log("Inputs:");
                 foreach (InputDescriptor input in t.InputDescriptors)
                 {
-                    Console.WriteLine("- {0}", input.Id);
+                    Context.Log("- {0}", input.Id);
                 }
 
-                Console.WriteLine("Schemes:");
+                Context.Log("Schemes:");
                 foreach (ServiceEndpointAuthenticationScheme scheme in t.AuthenticationSchemes)
                 {
-                    Console.WriteLine("- {0}", scheme.Scheme);
-                    Console.WriteLine("  Inputs:");
+                    Context.Log("- {0}", scheme.Scheme);
+                    Context.Log("  Inputs:");
                     foreach (InputDescriptor input in scheme.InputDescriptors)
                     {
-                        Console.WriteLine("  - {0}", input.Id);
+                        Context.Log("  - {0}", input.Id);
                     }
                 }
 
-                Console.WriteLine("================================");
+                Context.Log("================================");
             }
 
             return types;
@@ -67,7 +67,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Serviceendpoint
             // Create a generic service endpoint 
             ServiceEndpoint endpoint = endpointClient.CreateServiceEndpointAsync(project.Id, new ServiceEndpoint()
             {
-                Name = "MyServiceEndpoint",
+                Name = "MyNewServiceEndpoint",
                 Type = ServiceEndpointTypes.Generic,
                 Url = new Uri("https://myserver"),
                 Authorization = new EndpointAuthorization()
@@ -81,7 +81,11 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Serviceendpoint
                 }
             }).Result;
 
-            Console.WriteLine("Created endpoint: {0} {1} in {2}", endpoint.Id, endpoint.Name, project.Name);
+            Context.Log("Created endpoint: {0} {1} in {2}", endpoint.Id, endpoint.Name, project.Name);
+
+            // Save new endpoint so it can be deleted later
+            Context.SetValue<Guid>("$newServiceEndpointId", endpoint.Id);
+            Context.SetValue<Guid>("$newServiceEndpointProjectId", project.Id);
 
             return endpoint;
         }
@@ -101,13 +105,36 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Serviceendpoint
                 type: ServiceEndpointTypes.Generic).Result;
 
             // Show the endpoints
-            Console.WriteLine("Endpoints in project: {0}", project.Name);
+            Context.Log("Endpoints in project: {0}", project.Name);
             foreach (ServiceEndpoint endpoint in endpoints)
             {
-                Console.WriteLine("- {0} {1}", endpoint.Id.ToString().PadLeft(6), endpoint.Name);
+                Context.Log("- {0} {1}", endpoint.Id.ToString().PadLeft(6), endpoint.Name);
             }
 
             return endpoints;           
+        }
+
+        [ClientSampleMethod]
+        public void DeleteServiceEndpoint()
+        {
+            // Get ID of previously-created service endpoint
+            Guid endpointId = Context.GetValue<Guid>("$newServiceEndpointId");
+            Guid projectId = Context.GetValue<Guid>("$newServiceEndpointProjectId");
+
+            // Get a service endpoint client instance
+            VssConnection connection = Context.Connection;
+            ServiceEndpointHttpClient endpointClient = connection.GetClient<ServiceEndpointHttpClient>();
+
+            try
+            {
+                endpointClient.DeleteServiceEndpointAsync(projectId, endpointId).SyncResult();
+
+                Context.Log("Sucecssfully deleted endpoint {0} in {1}", endpointId, projectId);
+            }
+            catch (Exception ex)
+            {
+                Context.Log(ex.Message);
+            }
         }
     }
 }
