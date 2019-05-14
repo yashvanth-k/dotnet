@@ -239,7 +239,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
         {
             List<string> words = new List<string>();
 
-            string wordListName = "Microsoft.TeamServices.Samples.Client.Git.WordList.txt";
+            string wordListName = "Microsoft.Azure.DevOps.ClientSamples.Git.WordList.txt";
             using (Stream inputStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(wordListName))
             using (StreamReader reader = new StreamReader(inputStream))
             {
