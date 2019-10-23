@@ -6,9 +6,11 @@ This repository contains C# samples that show how to integrate with  Azure DevOp
 
 ## Explore the samples
 
-Take a minute to explore the repo. It contains short snippets as well as longer examples that demonstrate how to integrate with Azure DevOps Services and Azure DevOps Server
+Take a minute to explore the repo. It contains short as well as longer examples that demonstrate how to integrate with Azure DevOps Services and Azure DevOps Server. 
 
-* **Snippets**: short reusable code blocks demonstrating how to call specific APIs.
+In the ClientLibrary folder, you'll find the following:
+
+* **Samples**: short reusable code blocks demonstrating how to call specific APIs.
 * **Quickstarts**: self-contained programs demonstrating a specific scenario, typically by calling multiple APIs.
 
 ## About the official client libraries
