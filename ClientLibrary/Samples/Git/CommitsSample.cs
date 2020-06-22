@@ -44,6 +44,8 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
         public List<GitCommitRef> GetCommitsOnABranch()
         {
             GitRepository repo = GitSampleHelpers.FindAnyRepositoryOnAnyProject(this.Context);
+            string branchName = repo.DefaultBranch;
+            string branchNameWithoutRefsHeads = branchName.Remove(0, "refs/heads/".Length);
 
             return this.Context.Connection.GetClient<GitHttpClient>()
                 .GetCommitsAsync(repo.Id, new GitQueryCommitsCriteria()
@@ -52,7 +54,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
                     {
                         VersionType = GitVersionType.Branch,
                         VersionOptions = GitVersionOptions.None,
-                        Version = "master"
+                        Version = branchNameWithoutRefsHeads
                     }
                 }).Result;
         }
@@ -61,6 +63,8 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
         public List<GitCommitRef> GetCommitsOnABranchAndInAPath()
         {
             GitRepository repo = GitSampleHelpers.FindAnyRepositoryOnAnyProject(this.Context);
+            string branchName = repo.DefaultBranch;
+            string branchNameWithoutRefsHeads = branchName.Remove(0, "refs/heads/".Length);
 
             return this.Context.Connection.GetClient<GitHttpClient>()
                 .GetCommitsAsync(repo.Id, new GitQueryCommitsCriteria()
@@ -69,7 +73,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
                     {
                         VersionType = GitVersionType.Branch,
                         VersionOptions = GitVersionOptions.None,
-                        Version = "master"
+                        Version = branchNameWithoutRefsHeads
                     },
                     ItemPath = "/debug.log"
                 }).Result;
@@ -105,11 +109,20 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
         public List<GitCommitRef> GetCommitsReachableFromACommitAndInPath()
         {
             GitRepository repo = GitSampleHelpers.FindAnyRepositoryOnAnyProject(this.Context);
+            string branchName = repo.DefaultBranch;
+            string branchNameWithoutRefsHeads = branchName.Remove(0, "refs/heads/".Length);
+            GitVersionDescriptor tipCommitDescriptor = new GitVersionDescriptor()
+            {
+                VersionType = GitVersionType.Branch,
+                VersionOptions = GitVersionOptions.None,
+                Version = branchNameWithoutRefsHeads
+            };
+
 
             return this.Context.Connection.GetClient<GitHttpClient>()
                 .GetCommitsAsync(repo.Id, new GitQueryCommitsCriteria()
                 {
-                    CompareVersion = m_tipCommitDescriptor,
+                    CompareVersion = tipCommitDescriptor,
                     ItemVersion = m_oldestDescriptor,
                     ItemPath = "/README.md",
                 }).Result;
@@ -129,13 +142,6 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
             VersionType = GitVersionType.Commit,
             VersionOptions = GitVersionOptions.None,
             Version = "4fa42e1a7b0215cc70cd4e927cb70c422123af84"
-        };
-
-        private GitVersionDescriptor m_tipCommitDescriptor = new GitVersionDescriptor()
-        {
-            VersionType = GitVersionType.Branch,
-            VersionOptions = GitVersionOptions.None,
-            Version = "master"
         };
     }
 }

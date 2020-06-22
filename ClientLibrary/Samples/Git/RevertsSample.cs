@@ -19,34 +19,36 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
 
             Guid projectId = ClientSampleHelpers.FindAnyProject(this.Context).Id;
             GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, projectId);
+            string branchName = repo.DefaultBranch;
+            string branchNameWithoutRefsHeads = branchName.Remove(0, "refs/heads/".Length);
 
-            // find the latest commit on master
-            GitCommitRef latestCommitOnMaster = gitClient.GetCommitsAsync(repo.Id, new GitQueryCommitsCriteria()
+            // find the latest commit on default
+            GitCommitRef latestCommitOnDefault = gitClient.GetCommitsAsync(repo.Id, new GitQueryCommitsCriteria()
             {
                 ItemVersion = new GitVersionDescriptor()
                 {
-                    Version = "master",
+                    Version = branchNameWithoutRefsHeads,
                     VersionType = GitVersionType.Branch
                 },
                 Top = 1
             }).Result.First();
 
             // generate a unique name to suggest for the branch
-            string suggestedBranchName = "refs/heads/vsts-dotnet-samples/" + GitSampleHelpers.ChooseRefsafeName();
+            string suggestedBranchName = "refs/heads/azure-devops-dotnet-samples/" + GitSampleHelpers.ChooseRefsafeName();
 
             // write down the name for a later sample
             this.Context.SetValue<string>("$gitSamples.suggestedRevertBranchName", suggestedBranchName);
 
-            // revert it relative to master
+            // revert it relative to default branch
             GitRevert revert = gitClient.CreateRevertAsync(
                 new GitAsyncRefOperationParameters()
                 {
-                    OntoRefName = "refs/heads/master",
+                    OntoRefName = branchName,
                     GeneratedRefName = suggestedBranchName,
                     Repository = repo,
                     Source = new GitAsyncRefOperationSource()
                     {
-                        CommitList = new GitCommitRef[] { new GitCommitRef() { CommitId = latestCommitOnMaster.CommitId } }
+                        CommitList = new GitCommitRef[] { new GitCommitRef() { CommitId = latestCommitOnDefault.CommitId } }
                     },
                 },
                 projectId,

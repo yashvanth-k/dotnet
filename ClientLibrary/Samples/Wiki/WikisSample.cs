@@ -70,7 +70,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Wiki
                 MappedPath = "/",      // any folder path in the repository
                 Version = new GitVersionDescriptor()
                 {
-                    Version = "master"
+                    Version = "main"
                 }
             };
 

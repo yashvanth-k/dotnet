@@ -13,19 +13,20 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Git
     public class PullRequestsSample : ClientSample
     {
         [ClientSampleMethod]
-        public IEnumerable<GitPullRequest> ListPullRequestsIntoMaster()
+        public IEnumerable<GitPullRequest> ListPullRequestsIntoDefault()
         {
             VssConnection connection = this.Context.Connection;
             GitHttpClient gitClient = connection.GetClient<GitHttpClient>();
 
             TeamProjectReference project = ClientSampleHelpers.FindAnyProject(this.Context);
             GitRepository repo = GitSampleHelpers.FindAnyRepository(this.Context, project.Id);
+            string branchName = repo.DefaultBranch;
 
             List<GitPullRequest> prs = gitClient.GetPullRequestsAsync(
                 repo.Id,
                 new GitPullRequestSearchCriteria()
                 {
-                    TargetRefName = "refs/heads/master",
+                    TargetRefName = branchName,
                 }).Result;
 
             Console.WriteLine("project {0}, repo {1}", project.Name, repo.Name);
