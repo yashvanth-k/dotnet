@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Azure.DevOps.ClientSamples.WorkItemTracking
 {
@@ -1113,19 +1114,9 @@ namespace Microsoft.Azure.DevOps.ClientSamples.WorkItemTracking
 
             //create a work item that drops into the new column by default
             WorkItem workItem = this.CreateWorkItem("Board Column Test", "User Story");
-                       
-            string wefField = "";
 
             //find the WEF field
-            //todo: do something smarter rather than loop through all fields to find the WEF
-            foreach (var field in workItem.Fields)
-            {               
-                if (field.Key.Contains("_Kanban.Column"))
-                {
-                    wefField = field.Key.ToString();
-                    break;
-                }
-            }
+            string wefField = workItem.Fields.Where(f => f.Key.Contains("_Kanban.Column")).First().Key.ToString();
 
             //build a patch document to update the WEF field
             patchDocument.Add(
