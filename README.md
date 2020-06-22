@@ -1,5 +1,7 @@
 # .NET samples for Azure DevOps
 
+**NOTE**: This repository's default branch is `main`. Contributions will no longer be accepted targeting `master`.
+
 [![Build Status](https://dev.azure.com/ms/azure-devops-dotnet-samples/_apis/build/status/Microsoft.azure-devops-dotnet-samples?branchName=master)](https://dev.azure.com/ms/azure-devops-dotnet-samples/_build/latest?definitionId=82&branchName=master)
 
 This repository contains C# samples that show how to integrate with  Azure DevOps Services and Azure using our [public client libraries](https://www.nuget.org/profiles/nugetvss), service hooks, and more.
