@@ -134,9 +134,9 @@ namespace Microsoft.Azure.DevOps.ClientSamples.ProjectsAndTeams
             ProcessHttpClient processClient = Context.Connection.GetClient<ProcessHttpClient>();
             Guid processId = processClient.GetProcessesAsync().Result.Find(process => { return process.Name.Equals(processName, StringComparison.InvariantCultureIgnoreCase); }).Id;
 
-            Dictionary<string, string> processProperaties = new Dictionary<string, string>();
+            Dictionary<string, string> processProperties = new Dictionary<string, string>();
 
-            processProperaties[TeamProjectCapabilitiesConstants.ProcessTemplateCapabilityTemplateTypeIdAttributeName] =
+            processProperties[TeamProjectCapabilitiesConstants.ProcessTemplateCapabilityTemplateTypeIdAttributeName] =
                 processId.ToString();
 
             // Construct capabilities dictionary
@@ -145,7 +145,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples.ProjectsAndTeams
             capabilities[TeamProjectCapabilitiesConstants.VersionControlCapabilityName] = 
                 versionControlProperties;
             capabilities[TeamProjectCapabilitiesConstants.ProcessTemplateCapabilityName] = 
-                processProperaties;
+                processProperties;
 
             // Construct object containing properties needed for creating the project
             TeamProject projectCreateParameters = new TeamProject()
