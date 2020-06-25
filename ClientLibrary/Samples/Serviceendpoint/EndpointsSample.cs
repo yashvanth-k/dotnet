@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if NETCOREAPP
+// not working in netcore3.1
+#else
+using System;
 using System.Collections.Generic;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.VisualStudio.Services.FormInput;
@@ -178,4 +181,4 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Serviceendpoint
         }
     }
 }
-
+#endif
