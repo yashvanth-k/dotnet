@@ -602,6 +602,9 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Release
             return deployments;
         }
 
+#if NETCOREAPP
+// not working in netcore3.1
+#else
         [ClientSampleMethod]
         public IEnumerable<Deployment> ListAllDeploymentsForASpecificReleaseDefinitionId()
         {
@@ -642,6 +645,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples.Release
 
             return deployments;
         }
+#endif
 
         [ClientSampleMethod]
         public System.IO.Stream GetLogsOfReleaseTask()

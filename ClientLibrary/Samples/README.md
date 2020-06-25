@@ -10,6 +10,19 @@ Samples are organized by "area" (service) and "resource". Each sample class show
 
 ## Run the samples
 
+1. Clone this repository.
+
+2. Build the solution using .NET Core 3.1 or later.
+
+3. Run `dotnet run --project ClientSamples.netcore.csproj` with the required arguments:
+   * `/url:{value}`: URL of the account/collection to run the samples against.
+   * `/area:{value}`: API area (work, wit, notification, git, core, build) to run the client samples for. Use * to include all areas. Be sure to escape the * if you're on a Unix.
+   * `/resource:{value}`: API resource to run the client samples for. Use * to include all resources. Be sure to escape the * if you're on a Unix.
+
+> **IMPORTANT**: some samples are destructive. It is recommended that you run these samples against a test account.
+
+## Run the samples - .NET Framework
+
 1. Clone this repository and open in Visual Studio (2015 or later)
 
 2. Build the solution (you may need to restore the required NuGet packages first)

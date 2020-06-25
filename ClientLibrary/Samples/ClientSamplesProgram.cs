@@ -15,6 +15,8 @@ namespace Microsoft.Azure.DevOps.ClientSamples
     /// </summary>
     public class Program
     {
+        public const string PAT_ENV_VAR = "AZURE_DEVOPS_PAT";
+
         public static int Main(string[] args)
         {
             if (args.Length == 0)
@@ -39,6 +41,16 @@ namespace Microsoft.Azure.DevOps.ClientSamples
 
                 return -1;
             }
+
+#if NETCOREAPP
+            string checkPat = Environment.GetEnvironmentVariable(PAT_ENV_VAR);
+            if (string.IsNullOrEmpty(checkPat))
+            {
+                Console.WriteLine("On .NET Core, you must set an environment variable " + PAT_ENV_VAR + " with a personal access token.");
+                return -1;
+            }
+#endif
+
 
             try
             {
@@ -93,7 +105,7 @@ namespace Microsoft.Azure.DevOps.ClientSamples
             if (connectionUrl == null || area == null || resource == null)
             {
                 throw new ArgumentException("Missing required arguments");
-            }                     
+            }
         }
 
         private static void ShowUsage() {
