@@ -66,7 +66,17 @@ namespace Microsoft.Azure.DevOps.ClientSamples
 
             if (credentials == null)
             {
+#if NETCOREAPP
+                string pat = Environment.GetEnvironmentVariable(Program.PAT_ENV_VAR);
+                if (string.IsNullOrEmpty(pat))
+                {
+                    throw new ArgumentException("On .NET Core, you must set an environment variable " + Program.PAT_ENV_VAR + " with a personal access token.");
+                }
+
+                this.Credentials = new VssBasicCredential("pat", pat);
+#else
                 this.Credentials = new VssClientCredentials();
+#endif
             }
             else
             {
