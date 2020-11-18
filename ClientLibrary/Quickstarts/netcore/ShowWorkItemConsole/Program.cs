@@ -20,7 +20,7 @@ namespace ConsoleApp
                 // Create a connection
                 VssConnection connection = new VssConnection(orgUrl, new VssBasicCredential(string.Empty, personalAccessToken));
 
-                // Show details a work item
+                // Show details of a work item
                 ShowWorkItemDetails(connection, workItemId).Wait();
             }
             else
