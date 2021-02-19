@@ -33,7 +33,7 @@ namespace MaterializeUserQuickStarts
                 // check to see if we have a succesfull respond
                 if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine("Successfully materizlized the user");
+                    Console.WriteLine("Successfully materialized the user");
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
